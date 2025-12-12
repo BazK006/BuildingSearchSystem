@@ -1,0 +1,18 @@
+# Node modules (ถ้ามี npm)
+node_modules/
+
+# Build files
+dist/
+build/
+
+# System files
+.DS_Store
+Thumbs.db
+
+# VSCode settings ส่วนตัว
+.vscode/
+
+# Environment (API Keys ความลับต่าง ๆ)
+.env
+.env.local
+.env.production

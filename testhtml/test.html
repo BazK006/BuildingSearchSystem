@@ -1,0 +1,206 @@
+<!doctype html>
+<html lang="th">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Mini Calendar + Clock + Top Buildings</title>
+    <style>
+        /***** Minimal CSS only for tiny sizing *****/
+        .mini-widget {
+            width: 320px;
+            border-radius: 12px;
+            padding: 10px;
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .clock-box {
+            padding: 6px 10px;
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        .time {
+            font-size: 18px;
+            font-weight: 700;
+        }
+
+        .ampm {
+            font-size: 10px;
+            opacity: 0.7;
+        }
+
+        .bld {
+            padding: 6px;
+            border-radius: 8px;
+            font-size: 12px;
+            background: rgba(255, 255, 255, 0.05);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .bld .dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #1e90ff;
+        }
+    </style>
+</head>
+
+<body style="background:transparent;">
+
+    <!-- Mini widget -->
+    <div class="mini-widget" role="region" aria-label="Mini calendar and top buildings">
+
+        <!-- Right side: clock + top buildings -->
+        <div class="right">
+            <div>
+                <div class="clock" aria-live="polite">
+                    <div style="display:flex;align-items:baseline;">
+                        <div class="time" id="timeText">00:00</div>
+                        <div class="ampm" id="ampmText">AM</div>
+                    </div>
+                    <div style="text-align:right;">
+                        <div class="date-line" id="dateLine">Wednesday, 1 May</div>
+                    </div>
+                </div>
+            </div>
+
+            <div style="font-size:11px;color:var(--muted);">Top buildings</div>
+
+            <div class="top-buildings" id="topBuildings">
+                <!-- example 4 items -->
+                <div class="bld">
+                    <div class="dot"></div>
+                    <div>
+                        <strong>อาคารเรียน 1</strong>
+                        <small>อาคารหลัก</small>
+                    </div>
+                </div>
+
+                <div class="bld">
+                    <div class="dot"></div>
+                    <div>
+                        <strong>โรงอาหาร</strong>
+                        <small>เปิด 07:00</small>
+                    </div>
+                </div>
+
+                <div class="bld">
+                    <div class="dot"></div>
+                    <div>
+                        <strong>ห้องสมุด</strong>
+                        <small>ชั้น 2</small>
+                    </div>
+                </div>
+
+                <div class="bld">
+                    <div class="dot"></div>
+                    <div>
+                        <strong>อาคารกีฬา</strong>
+                        <small>สนามในร่ม</small>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        // --- tiny digital clock ---
+        function updateClock() {
+            const now = new Date();
+            let h = now.getHours();
+            const m = now.getMinutes();
+            const s = now.getSeconds();
+            const ampm = h >= 12 ? 'PM' : 'AM';
+            const hh = (h % 12) === 0 ? 12 : (h % 12);
+            const pad = n => n.toString().padStart(2, '0');
+            document.getElementById('timeText').textContent = pad(hh) + ':' + pad(m);
+            document.getElementById('ampmText').textContent = ampm;
+            const opts = { weekday: 'short', day: 'numeric', month: 'short' };
+            document.getElementById('dateLine').textContent = now.toLocaleDateString('th-TH', opts);
+        }
+        updateClock();
+        setInterval(updateClock, 1000);
+
+        // --- tiny calendar render ---
+        function renderTinyCalendar(containerId, monthElId) {
+            const now = new Date();
+            const year = now.getFullYear();
+            const month = now.getMonth(); // 0-based
+
+            const first = new Date(year, month, 1);
+            const last = new Date(year, month + 1, 0);
+            const startDay = first.getDay(); // 0 = Sun (will adapt below)
+            const days = last.getDate();
+
+            const container = document.getElementById(containerId);
+            const monthEl = document.getElementById(monthElId);
+            const monthNames = ['ม.ค.', 'ก.พ.', 'มี.ค.', 'เม.ย.', 'พ.ค.', 'มิ.ย.', 'ก.ค.', 'ส.ค.', 'ก.ย.', 'ต.ค.', 'พ.ย.', 'ธ.ค.'];
+            monthEl.textContent = monthNames[month] + ' ' + year;
+
+            // clear
+            container.innerHTML = '';
+            // weekdays header (Mon-Sun short)
+            const weekdays = ['จ', 'อ', 'พ', 'พฤ', 'ศ', 'ส', 'อา'];
+            weekdays.forEach(w => {
+                const el = document.createElement('div');
+                el.className = 'weekday day';
+                el.textContent = w;
+                container.appendChild(el);
+            });
+
+            // we want weeks starting Mon -> convert startDay (0=Sun)
+            let leading = startDay === 0 ? 6 : startDay - 1;
+            // add blanks
+            for (let i = 0; i < leading; i++) {
+                const el = document.createElement('div');
+                el.className = 'day';
+                container.appendChild(el);
+            }
+
+            // dates
+            for (let d = 1; d <= days; d++) {
+                const el = document.createElement('div');
+                el.className = 'day date';
+                el.textContent = d;
+                // highlight today
+                if (d === now.getDate()) {
+                    el.classList.add('today');
+                }
+                container.appendChild(el);
+            }
+
+            // small final filler to keep grid neat (optional)
+            // not necessary for tiny widget
+        }
+
+        renderTinyCalendar('calGrid', 'calMonth');
+
+        // Expose a small API to update buildings if needed
+        window.setTopBuildings = function (list) {
+            const wrap = document.getElementById('topBuildings');
+            wrap.innerHTML = '';
+            list.slice(0, 4).forEach(item => {
+                const node = document.createElement('div');
+                node.className = 'bld';
+                node.innerHTML = `<div class="dot"></div><div><strong>${item.title}</strong><small>${item.meta || ''}</small></div>`;
+                wrap.appendChild(node);
+            });
+        }
+
+        // example: how to call later
+        // window.setTopBuildings([
+        //   {title:'อาคารเรียน 1', meta:'อาคารหลัก'},
+        //   {title:'โรงอาหาร', meta:'เปิด 07:00'},
+        //   {title:'ห้องสมุด', meta:'ชั้น 2'},
+        //   {title:'อาคารกีฬา', meta:'สนามในร่ม'},
+        // ]);
+    </script>
+</body>
+
+</html>

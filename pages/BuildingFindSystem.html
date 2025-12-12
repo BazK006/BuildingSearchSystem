@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="th">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ระบบค้นหาอาคาร</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="../assets/css/findbuildcss.css">
+</head>
+
+<body>
+    <header id="mainHeader" class="shadow-sm bg-white">
+        <div class="container py-3 d-flex flex-column flex-md-row 
+                justify-content-between align-items-center text-center text-md-start">
+            <h4 class="m-1 fst-italic">ระบบค้นหาอาคาร</h4>
+            <button id="backBtn" class="btn btn-outline-primary btn-sm ms-auto">
+                ← กลับ
+            </button>
+        </div>
+    </header>
+
+    <!-- ปุ่ม Hamburger -->
+    <button class="hamburger" onclick="toggleSidebar()">
+        <div></div>
+        <div></div>
+        <div></div>
+    </button>
+
+    <!-- Sidebar -->
+    <div class="sidebar pt-5" id="sidebar">
+        <a class='d-block p-3 text-white text-decoration-none' href="../index.html">หน้าหลัก</a>
+        <a class='d-block p-3 text-white text-decoration-none' href="BuildingFindSystem.html">ระบบค้นหาอาคาร</a>
+        <a class='d-block p-3 text-white text-decoration-none' href="schoolmap.html">แผนที่ภายในโรงเรียน</a>
+        <a class='d-block p-3 text-white text-decoration-none' href="buildall.html">อาคารทั้งหมด</a>
+    </div>
+
+    <!-- Overlay มืดด้านหลัง -->
+    <div class="overlay" id="overlay" onclick="toggleSidebar()"></div>
+
+    <div class="container py-5" id="buildingSection">
+        <h2 class="text-center mb-4 fw-bold">ระบบค้นหาอาคารภายในโรงเรียน</h2>
+
+        <!-- Search -->
+        <div class="search-box">
+            <input type="text" id="searchInput" class="form-control form-control-lg shadow-sm"
+                placeholder="ค้นหาอาคาร...">
+        </div>
+
+        <!-- Cards -->
+        <div class="row g-4 justify-content-center" id="buildingContainer"></div>
+
+        <div class="box1" style="height: 500px;"></div>
+
+        <hr class="mt-5" style="position: relative; top: 30px;">
+        <footer class="text-center p-3 bg-light" style="margin-bottom: 10px; position: relative; top: 30px;">
+            © 2025 ระบบค้นหาอาคารภายในโรงเรียนพิบูลมังสาหาร | By Kasemsak
+        </footer>
+    </div>
+
+    <script>
+        const buildings = [
+            { name: "อาคาร 1", desc: "อาคารเรียนหลัก ชั้น 1–4", img: "https://via.placeholder.com/500x300", mapsLink: "https://maps.app.goo.gl/uNfjEbzdJfrsAitk9" },
+            { name: "อาคาร 2", desc: "แผนกวิทยาศาสตร์", img: "https://via.placeholder.com/500x300", mapsLink: "https://maps.app.goo.gl/AicjxiWgmMUX4PAT7" },
+            { name: "สนามกีฬาฟุตบอล", desc: "โซนกลางแจ้ง", img: "https://via.placeholder.com/500x300", mapsLink: "https://maps.app.goo.gl/uNfjEbzdJfrsAitk9" },
+            { name: "อาคารคอมพิวเตอร์", desc: "ห้องคอมฯ และสื่อการสอน", img: "https://via.placeholder.com/500x300", mapsLink: "https://maps.app.goo.gl/uNfjEbzdJfrsAitk9" },
+            { name: "อาคารกิจกรรม", desc: "ห้องประชุม และห้องชมรม", img: "https://via.placeholder.com/500x300", mapsLink: "https://maps.app.goo.gl/uNfjEbzdJfrsAitk9" },
+            { name: "โรงยิม", desc: "สนามกีฬาในร่ม", img: "https://via.placeholder.com/500x300", mapsLink: "https://maps.app.goo.gl/uNfjEbzdJfrsAitk9" },
+            { name: "อาคาร 10 AP", desc: "อาคารเรียนโปรแกรม Advance Program", img: "https://via.placeholder.com/500x300", mapsLink: "https://maps.app.goo.gl/uNfjEbzdJfrsAitk9" },
+            { name: "อาคาร 1", desc: "อาคารเรียน", img: "https://via.placeholder.com/500x300", mapsLink: "https://maps.app.goo.gl/uNfjEbzdJfrsAitk9" },
+            { name: "อาคาร 2", desc: "อาคารเรียน", img: "https://via.placeholder.com/500x300", mapsLink: "https://maps.app.goo.gl/uNfjEbzdJfrsAitk9" }
+        ];
+
+        const container = document.getElementById("buildingContainer");
+
+        function renderCards(items) {
+            container.innerHTML = "";
+            items.forEach(b => {
+                container.innerHTML += `
+                    <div class="col-12 col-md-6 col-lg-4">
+                        <div class="building-card">
+                            <img src="${b.img}" class="building-img">
+                            <div class="p-3">
+                                <h5 class="building-title">${b.name}</h5>
+                                <p class="text-muted m-0">${b.desc}</p>
+                                <a href="${b.mapsLink}" target="_blank" id="btnlocation2"
+                                    class="btn w-100 mt-3">ดูพิกัดอาคาร</a>
+                            </div>
+                        </div>
+                    </div>`;
+            });
+        }
+
+        renderCards(buildings);
+
+        // ค้นหา
+        document.getElementById("searchInput").addEventListener("input", function () {
+            const text = this.value.toLowerCase();
+            const filtered = buildings.filter(b => b.name.toLowerCase().includes(text));
+            renderCards(filtered);
+        });
+
+        // ปุ่มสามขีด hamburger //
+        function toggleSidebar() {
+            document.getElementById("sidebar").classList.toggle("active");
+            document.getElementById("overlay").classList.toggle("active");
+            document.querySelector(".hamburger").classList.toggle("active");
+        }
+
+        // -----------Header-----------//
+        const header = document.getElementById("mainHeader");
+        const triggerPoint = 1;
+
+        header.classList.add("header-hide");
+
+        let lastScroll = 0;
+
+        window.addEventListener("scroll", () => {
+            const currentScroll = window.scrollY;
+
+            if (currentScroll <= triggerPoint) {
+                // เลื่อนชิดบนสุด → ซ่อน header
+                header.classList.add("header-hide");
+                header.classList.remove("header-show");
+            }
+            else if (currentScroll > lastScroll) {
+                // เลื่อนลง → แสดง header
+                header.classList.remove("header-hide");
+                header.classList.add("header-show");
+            }
+            // เลื่อนขึ้นแต่ยังไม่ถึงบนสุด → ค้างไว้แบบเดิม
+            // ไม่มี else block สำหรับเลื่อนขึ้นแล้วซ่อน
+
+            lastScroll = currentScroll;
+        });
+
+
+        document.getElementById("backBtn").addEventListener("click", () => {
+            if (window.history.length > 1) {
+                window.history.back();
+            } else {
+                window.location.href = "index.html"; // เผื่อเปิดมาหน้าแรกเลย ให้กลับไปหน้า Home
+            }
+        });
+    </script>
+
+</body>
+
+</html>

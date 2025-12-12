@@ -1,0 +1,165 @@
+body {
+  background: #f7f8fa;
+  font-family: "Prompt", sans-serif;
+}
+
+/* Header ยาววว*/
+header {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 999;
+  transition: transform 0.25s ease;
+}
+
+.header-hide {
+  transform: translateY(-100%);
+}
+
+.header-show {
+  transform: translateY(0);
+}
+
+#mainHeader {
+  background: linear-gradient(135deg, #ffeb3b, #ff9800);
+  color: #2e2d2d;
+  border-radius: 0 0 12px 12px;
+}
+
+h1 {
+  font-size: 28px;
+  font-weight: 700;
+}
+
+#img1 {
+  box-shadow: 0 1px 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+#btnlocation {
+  background: linear-gradient(135deg, #ff6f00, #ff8f00);
+  border: none;
+  color: #ffffff;
+  transition: 0.4s;
+  transform: scale(1);
+}
+
+#btnlocation:hover {
+  background: linear-gradient(135deg, #e65100, #ff6f00);
+  transition: 0.4s;
+  transform: scale(1.07);
+}
+
+/*-----------ปุ่ม Hamburger------------- */
+.hamburger {
+  position: fixed;
+  top: 15px;
+  left: 15px;
+  z-index: 1051;
+  background: none;
+  border: none;
+  cursor: pointer;
+  outline: none;
+}
+
+.hamburger div {
+  width: 30px;
+  height: 3px;
+  margin: 6px 0;
+  background-color: #e67e22;
+  transition: 0.4s;
+}
+
+/* แปลงเป็นกากบาทตอนเปิด */
+.hamburger.active div:nth-child(1) {
+  transform: rotate(45deg) translate(5px, 7px);
+}
+
+.hamburger.active div:nth-child(2) {
+  opacity: 0;
+}
+
+.hamburger.active div:nth-child(3) {
+  transform: rotate(-45deg) translate(5px, -7.5px);
+}
+
+/* Sidebar */
+.sidebar {
+  position: fixed;
+  top: 0;
+  left: -260px;
+  width: 260px;
+  height: 100%;
+  transition: 0.4s;
+  z-index: 1050;
+  overflow-y: auto;
+  background-color: #3b486d;
+}
+
+/* เมื่อเปิด */
+.sidebar.active {
+  left: 0;
+}
+
+/* เนื้อหาหลัก */
+.content {
+  padding: 20px;
+}
+
+/* Background มืดตอน Sidebar เปิด */
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.4);
+  z-index: 1049;
+  display: none;
+}
+
+.overlay.active {
+  display: block;
+}
+
+a.d-block {
+  transition: background-color 0.3s, color 0.3s;
+}
+
+a.d-block:hover {
+  background-color: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(6px);
+  color: black;
+}
+
+.map-animate {
+  opacity: 0;
+  transform: scale(0.95);
+  transition: all 0.4s ease;
+}
+
+.map-animate.show {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.back-btn {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: none;
+  background: #f8f9fa;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
+  font-size: 20px;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+.back-btn:hover {
+  background: #0d6efd;
+  color: white;
+  transform: scale(1.1);
+}
+
+.back-btn:active {
+  transform: scale(0.95);
+}

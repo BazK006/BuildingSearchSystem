@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="../assets/css/allbuildcss.css">
+
+    <title>อาคารทั้งหมด</title>
+</head>
+
+<body class="bg-light">
+    <!-- ปุ่ม Hamburger -->
+    <button class="hamburger" onclick="toggleSidebar()">
+        <div></div>
+        <div></div>
+        <div></div>
+    </button>
+
+    <!-- Sidebar -->
+    <div class="sidebar pt-5" id="sidebar">
+        <a class='d-block p-3 text-white text-decoration-none' href="../index.html">หน้าหลัก</a>
+        <a class='d-block p-3 text-white text-decoration-none' href="BuildingFindSystem.html">ระบบค้นหาอาคาร</a>
+        <a class='d-block p-3 text-white text-decoration-none' href="schoolmap.html">แผนที่ภายในโรงเรียน</a>
+        <a class='d-block p-3 text-white text-decoration-none' href="buildall.html">อาคารทั้งหมด</a>
+    </div>
+
+    <!-- Overlay มืดด้านหลัง -->
+    <div class="overlay" id="overlay" onclick="toggleSidebar()"></div>
+
+    <div class="container py-4 mt-3">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <h1 class="mt-2 fw-semibold">อาคารทั้งหมดในโรงเรียน</h1>
+
+            <button onclick="history.back()" class="btn btn-outline-primary">
+                ← กลับ
+            </button>
+        </div>
+
+        <hr>
+
+        <div class="row g-4">
+
+            <!-- อาคาร 4 -->
+            <div class="col-md-3 col-sm-6">
+                <div class="card shadow building-card open-modal" data-img="../photo/b4.jpg">
+                    <img src="../photo/b4.jpg" class="card-img-top" alt="">
+                    <div class="card-body">
+                        <h5 class="card-title text-center">อาคาร 4</h5>
+                    </div>
+                </div>
+            </div>
+
+            <!-- อาคาร 7 -->
+            <div class="col-md-3 col-sm-6">
+                <div class="card shadow building-card open-modal" data-img="../photo/build7.jpg">
+                    <img src="../photo/build7.jpg" class="card-img-top" alt="">
+                    <div class="card-body">
+                        <h5 class="card-title text-center">อาคาร 7</h5>
+                    </div>
+                </div>
+            </div>
+
+            <!-- สนามกีฬา -->
+            <div class="col-md-3 col-sm-6">
+                <div class="card shadow building-card open-modal" data-img="../photo/court.jpg">
+                    <img src="../photo/court.jpg" class="card-img-top" alt="">
+                    <div class="card-body">
+                        <h5 class="card-title text-center">สนามกีฬา</h5>
+                    </div>
+                </div>
+            </div>
+
+            <!-- โดม -->
+            <div class="col-md-3 col-sm-6">
+                <div class="card shadow building-card open-modal" data-img="../photo/domphibun.jpg">
+                    <img src="../photo/domphibun.jpg" class="card-img-top" alt="">
+                    <div class="card-body">
+                        <h5 class="card-title text-center">โดมอเนกประสงค์</h5>
+                    </div>
+                </div>
+            </div>
+
+            <!-- หอประชุม -->
+            <div class="col-md-3 col-sm-6">
+                <div class="card shadow building-card open-modal" data-img="../photo/swn.jpg">
+                    <img src="../photo/swn.jpg" class="card-img-top" alt="">
+                    <div class="card-body">
+                        <h5 class="card-title text-center">โดมอเนกประสงค์</h5>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Modal รวมทุกภาพ -->
+        <div class="modal fade" id="imgModal">
+            <div class="modal-dialog modal-dialog-centered modal-lg">
+                <div class="modal-content bg-transparent border-0">
+                    <img id="modalImage" class="modal-img" style="width: 100%; border-radius: 10px;">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="box1" style="height: 300px;"></div>
+
+    <hr class="mb-3">
+    <footer class="text-center p-3 bg-light" style="margin-bottom: 20px;">
+        © 2025 ระบบค้นหาอาคารภายในโรงเรียนพิบูลมังสาหาร | By Kasemsak
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        // ปุ่มสามขีด hamburger //
+        function toggleSidebar() {
+            document.getElementById("sidebar").classList.toggle("active");
+            document.getElementById("overlay").classList.toggle("active");
+            document.querySelector(".hamburger").classList.toggle("active");
+        }
+
+        // modal เด้งขึ้น //
+        document.querySelectorAll('.open-modal').forEach(card => {
+            card.addEventListener('click', function () {
+                const img = this.getAttribute('data-img');
+                document.getElementById('modalImage').src = img;
+
+                const modal = new bootstrap.Modal(document.getElementById('imgModal'));
+                modal.show();
+            });
+        });
+    </script>
+
+</body>
+
+</html>
