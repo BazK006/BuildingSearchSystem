@@ -43,28 +43,33 @@
     <div class="overlay" id="overlay" onclick="toggleSidebar()"></div>
 
     <div class="container py-5" id="buildingSection">
-        <h2 class="text-center mb-4 fw-bold">ระบบค้นหาอาคารภายในโรงเรียน</h2>
 
-        <!-- Search -->
-        <div class="search-box">
-            <input type="text" id="searchInput" class="form-control form-control-lg shadow-sm"
-                placeholder="ค้นหาอาคาร...">
+        <!-- Title + Search -->
+        <div class="d-flex flex-column flex-md-row align-items-md-center justify-content-between mb-4 gap-3">
+            <h2 class="fw-bold mb-0 text-center text-md-start">
+                ระบบค้นหาอาคารภายในโรงเรียน
+            </h2>
+
+            <input type="text" id="searchInput" style="width: 50%;"
+                class="form-control form-control-lg shadow-sm w-md-50 mx-auto " placeholder="ค้นหาอาคาร...">
         </div>
+
+        <hr>
 
         <!-- Cards -->
         <div class="row g-4 justify-content-center" id="buildingContainer"></div>
 
         <div class="box1" style="height: 500px;"></div>
-
-        <hr class="mt-5" style="position: relative; top: 30px;">
-        <footer class="text-center p-3 bg-light" style="margin-bottom: 10px; position: relative; top: 30px;">
-            © 2025 ระบบค้นหาอาคารภายในโรงเรียนพิบูลมังสาหาร | By Kasemsak
-        </footer>
     </div>
+
+    <hr class="mb-5">
+    <footer class="text-center p-3 bg-light" style="position: relative; top: -20px;">
+        © 2025 ระบบค้นหาอาคารภายในโรงเรียนพิบูลมังสาหาร | By Kasemsak
+    </footer>
 
     <script>
         const buildings = [
-            { name: "อาคาร 1", desc: "อาคารเรียนหลัก ชั้น 1–4", img: "https://via.placeholder.com/500x300", mapsLink: "https://maps.app.goo.gl/uNfjEbzdJfrsAitk9" },
+            { name: "อาคาร 10", desc: "อาคารเรียนโปรแกรม AP Programme", img: "../photo/b10.jpg", mapsLink: "https://maps.app.goo.gl/uNfjEbzdJfrsAitk9" },
             { name: "อาคาร 2", desc: "แผนกวิทยาศาสตร์", img: "https://via.placeholder.com/500x300", mapsLink: "https://maps.app.goo.gl/AicjxiWgmMUX4PAT7" },
             { name: "สนามกีฬาฟุตบอล", desc: "โซนกลางแจ้ง", img: "https://via.placeholder.com/500x300", mapsLink: "https://maps.app.goo.gl/uNfjEbzdJfrsAitk9" },
             { name: "อาคารคอมพิวเตอร์", desc: "ห้องคอมฯ และสื่อการสอน", img: "https://via.placeholder.com/500x300", mapsLink: "https://maps.app.goo.gl/uNfjEbzdJfrsAitk9" },
@@ -72,7 +77,7 @@
             { name: "โรงยิม", desc: "สนามกีฬาในร่ม", img: "https://via.placeholder.com/500x300", mapsLink: "https://maps.app.goo.gl/uNfjEbzdJfrsAitk9" },
             { name: "อาคาร 10 AP", desc: "อาคารเรียนโปรแกรม Advance Program", img: "https://via.placeholder.com/500x300", mapsLink: "https://maps.app.goo.gl/uNfjEbzdJfrsAitk9" },
             { name: "อาคาร 1", desc: "อาคารเรียน", img: "https://via.placeholder.com/500x300", mapsLink: "https://maps.app.goo.gl/uNfjEbzdJfrsAitk9" },
-            { name: "อาคาร 2", desc: "อาคารเรียน", img: "https://via.placeholder.com/500x300", mapsLink: "https://maps.app.goo.gl/uNfjEbzdJfrsAitk9" }
+            { name: "อาคาร 4", desc: "อาคารเรียน", img: "https://via.placeholder.com/500x300", mapsLink: "https://maps.app.goo.gl/uNfjEbzdJfrsAitk9" }
         ];
 
         const container = document.getElementById("buildingContainer");

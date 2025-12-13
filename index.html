@@ -562,40 +562,41 @@
             const now = new Date();
 
             // เวลาไทย
-            const thailandTime = new Date(now.toLocaleString("en-US", { timeZone: "Asia/Bangkok" }));
+            const thailandTime = new Date(
+                now.toLocaleString("en-US", { timeZone: "Asia/Bangkok" })
+            );
 
             let hours = thailandTime.getHours();
             let minutes = thailandTime.getMinutes();
             let seconds = thailandTime.getSeconds();
-
-            // AM / PM แบบไทย (จริง ๆ เหมือนเดิม แต่ว่าแยกให้ถูก)
-            const ampm = hours >= 12 ? "น." : "น.";
-
-            // 12 hours format
-            hours = hours % 12;
-            hours = hours ? hours : 12;
 
             // เติม 0 หน้าเลข
             const hh = hours.toString().padStart(2, "0");
             const mm = minutes.toString().padStart(2, "0");
             const ss = seconds.toString().padStart(2, "0");
 
-            // แสดงเวลา
+            // แสดงเวลา (24 ชม.)
             document.getElementById("timeText").textContent = `${hh}:${mm}:${ss}`;
-            document.getElementById("ampmText").textContent = ampm;
+
+            // ไม่ใช้ AM / PM
+            const ampmEl = document.getElementById("ampmText");
+            if (ampmEl) ampmEl.textContent = "";
 
             // ชื่อวันไทย
             const daysTH = ["อาทิตย์", "จันทร์", "อังคาร", "พุธ", "พฤหัสบดี", "ศุกร์", "เสาร์"];
             // เดือนไทย
-            const monthsTH = ["มกราคม", "กุมภาพันธ์", "มีนาคม", "เมษายน", "พฤษภาคม", "มิถุนายน",
-                "กรกฎาคม", "สิงหาคม", "กันยายน", "ตุลาคม", "พฤศจิกายน", "ธันวาคม"];
+            const monthsTH = [
+                "มกราคม", "กุมภาพันธ์", "มีนาคม", "เมษายน", "พฤษภาคม", "มิถุนายน",
+                "กรกฎาคม", "สิงหาคม", "กันยายน", "ตุลาคม", "พฤศจิกายน", "ธันวาคม"
+            ];
 
             const dayName = daysTH[thailandTime.getDay()];
             const date = thailandTime.getDate();
             const monthName = monthsTH[thailandTime.getMonth()];
             const year = thailandTime.getFullYear() + 543;
 
-            document.getElementById("dateLine").textContent = `วัน${dayName}ที่ ${date} ${monthName} ${year}`;
+            document.getElementById("dateLine").textContent =
+                `วัน${dayName}ที่ ${date} ${monthName} ${year}`;
         }
 
         setInterval(updateClock, 1000);

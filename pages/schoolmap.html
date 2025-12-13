@@ -43,17 +43,21 @@
     <div class="overlay" id="overlay" onclick="toggleSidebar()"></div>
 
     <div class="container py-4 mt-5">
-
-        <h1 class="text-center fw-bold mb-2 fs-1">แผนที่ภายในโรงเรียนพิบูลมังสาหาร</h1>
+        <h1 class="text-start fw-bold mb-2 fs-1">
+            แผนที่ภายในโรงเรียนพิบูลมังสาหาร
+        </h1>
+        <hr>
 
         <div class="text-center">
-            <img src="../photo/pmfullmap.jpg" class="img-fluid rounded shadow" alt="แผนที่โรงเรียน"
+            <img src="../photo/map/pmfullmap.jpg" class="img-fluid rounded shadow" alt="แผนที่โรงเรียน"
                 style="max-width: 900px; width: 100%;">
         </div>
 
         <div class="container my-4">
-            <h4 id="header4" class="text-center fw-bold mb-3 fs-2" style="margin-top: 50px;">แผนที่โรงเรียนพิบูลมังสาหาร
-                ใน Google Maps</h4>
+            <h4 id="header4" class="text-start fw-bold mb-3 fs-2" style="margin-top: 50px;">แผนที่โรงเรียนพิบูลมังสาหาร
+                ใน Google Maps
+            </h4>
+            <hr>
 
             <div class="mx-auto map-animate" style="max-width: 900px; box-shadow: 0 1px 4px 4px rgba(0, 0, 0, 0.1);">
                 <div class="ratio ratio-16x9 rounded overflow-hidden shadow">
@@ -103,18 +107,13 @@
             const currentScroll = window.scrollY;
 
             if (currentScroll <= triggerPoint) {
-                // เลื่อนชิดบนสุด → ซ่อน header
                 header.classList.add("header-hide");
                 header.classList.remove("header-show");
             }
             else if (currentScroll > lastScroll) {
-                // เลื่อนลง → แสดง header
                 header.classList.remove("header-hide");
                 header.classList.add("header-show");
             }
-            // เลื่อนขึ้นแต่ยังไม่ถึงบนสุด → ค้างไว้แบบเดิม
-            // ไม่มี else block สำหรับเลื่อนขึ้นแล้วซ่อน
-
             lastScroll = currentScroll;
         });
 
