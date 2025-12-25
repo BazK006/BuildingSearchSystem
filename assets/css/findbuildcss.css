@@ -34,7 +34,7 @@ header {
 }
 
 /* การ์ดอาคาร */
-.building-card {
+#buildingCard {
   background: #ffffff;
   border-radius: 15px;
   overflow: hidden;
@@ -42,7 +42,7 @@ header {
   transition: 0.25s;
 }
 
-.building-card:hover {
+#buildingCard:hover {
   transform: translateY(-5px);
   box-shadow: 0px 6px 18px rgba(0, 0, 0, 0.12);
 }
@@ -77,6 +77,18 @@ header {
 }
 
 #btnlocation2:hover {
+  background: linear-gradient(135deg, #ff8f00, #ffa726);
+}
+
+.btnlocation2 {
+  background: linear-gradient(135deg, #ff6f00, #ff8f00);
+  border: none;
+  color: #ffffff;
+  font-size: 17px;
+  font-weight: 600;
+}
+
+.btnlocation2:hover {
   background: linear-gradient(135deg, #ff8f00, #ffa726);
 }
 
@@ -162,6 +174,7 @@ a.d-block:hover {
   color: black;
 }
 
+/* ---- ปุ่มกลับ ----*/
 .back-btn {
   width: 40px;
   height: 40px;
@@ -182,4 +195,11 @@ a.d-block:hover {
 
 .back-btn:active {
   transform: scale(0.95);
+}
+
+#modalImg {
+  width: 100%;
+  max-width: 550px;
+  object-fit: contain;
+  text-align: center;
 }

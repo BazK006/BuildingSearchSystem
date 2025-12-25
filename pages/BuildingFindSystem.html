@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ระบบค้นหาอาคาร</title>
+    <title>ระบบค้นหาอาคาร | โรงเรียนพิบูลมังสาหาร</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -17,7 +17,14 @@
     <header id="mainHeader" class="shadow-sm bg-white">
         <div class="container py-3 d-flex flex-column flex-md-row 
                 justify-content-between align-items-center text-center text-md-start">
-            <h4 class="m-1 fst-italic">ระบบค้นหาอาคาร</h4>
+            <div class="d-flex align-items-center gap-2">
+                <a href="../index.html" style="text-decoration: none; color: black;">
+                    <img src="../photo/pmlogo.png" width="38" height="36" class="img-fluid">
+                </a>
+                <a href="../index.html" style="text-decoration: none; color: black;">
+                    <h4 class="m-1 fst-italic">ระบบค้นหาอาคาร</h4>
+                </a>
+            </div>
             <button id="backBtn" class="btn btn-outline-primary btn-sm ms-auto">
                 ← กลับ
             </button>
@@ -50,64 +57,236 @@
                 ระบบค้นหาอาคารภายในโรงเรียน
             </h2>
 
-            <input type="text" id="searchInput" style="width: 50%;"
-                class="form-control form-control-lg shadow-sm w-md-50 mx-auto " placeholder="ค้นหาอาคาร...">
+            <input type="text" id="searchInput" style="width: 65%;"
+                class="form-control form-control-lg shadow-sm w-md-50 mx-auto "
+                placeholder="พิมพ์ชื่ออาคาร เช่น อาคาร 10... ">
         </div>
 
         <hr>
 
         <!-- Cards -->
         <div class="row g-4 justify-content-center" id="buildingContainer"></div>
+        <div id="noResult" class="text-center text-muted mt-5" style="display: none;">
+            🔍 ไม่พบอาคารที่ค้นหา
+        </div>
 
-        <div class="box1" style="height: 500px;"></div>
     </div>
+
+    <!-- Modal for Card Search -->
+    <div class="modal fade" id="detailModal" tabindex="-1">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content rounded-4">
+
+                <div class="modal-header">
+                    <h5 class="modal-title fw-bold" id="modalTitle"></h5>
+                    <button class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+
+                <div class="modal-body">
+                    <img id="modalImg" class="img-fluid rounded mb-3 d-block mx-auto">
+                    <p id="modalDesc" class="text-muted"></p>
+                </div>
+
+                <div class="modal-footer">
+                    <a id="modalMap" target="_blank" class="btn btn-primary btnlocation2">
+                        ดูพิกัดบน Google Maps
+                    </a>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <div class="box1" style="height: 500px;"></div>
+
+    <!-- วิธีใช้ -->
+    <div class="container my-5">
+
+        <div class="card shadow-sm p-4"
+            style="border-radius: 18px; background: #fff; font-size: 14px; line-height: 1.7;">
+
+            <h5 class="fw-bold mb-3">
+                <i class="bi bi-lightbulb me-2 text-primary"></i>
+                วิธีใช้งานระบบค้นหาอาคาร
+            </h5>
+
+            <div class="row g-3">
+
+                <!-- Step 1 -->
+                <div class="col-12 col-md-6">
+                    <div class="d-flex align-items-start">
+                        <span class="badge bg-primary rounded-pill me-3 mt-1">1</span>
+                        <div>
+                            <div class="fw-bold">พิมพ์ชื่ออาคาร</div>
+                            <div class="text-muted">
+                                พิมพ์ชื่ออาคารที่ต้องการค้นหาในช่องค้นหาด้านบน
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 2 -->
+                <div class="col-12 col-md-6">
+                    <div class="d-flex align-items-start">
+                        <span class="badge bg-primary rounded-pill me-3 mt-1">2</span>
+                        <div>
+                            <div class="fw-bold">เลือกอาคารจากรายการ</div>
+                            <div class="text-muted">
+                                คลิกการ์ดอาคารเพื่อดูรูปภาพและรายละเอียดเบื้องต้นของอาคาร
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 3 -->
+                <div class="col-12 col-md-6">
+                    <div class="d-flex align-items-start">
+                        <span class="badge bg-primary rounded-pill me-3 mt-1">3</span>
+                        <div>
+                            <div class="fw-bold">กดปุ่มดูพิกัดบน Google Maps</div>
+                            <div class="text-muted" style="max-width: 410px;">
+                                ระบบจะเปิดตำแหน่งอาคารใน Google Maps เพื่อแสดงพิกัดบนแผนที่
+                                กรุณาสังเกตจุดปักหมุดสีแดง ซึ่งเป็นตำแหน่งของอาคารที่เลือก
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 4 -->
+                <div class="col-12 col-md-6">
+                    <div class="d-flex align-items-start">
+                        <span class="badge bg-primary rounded-pill me-3 mt-1">4</span>
+                        <div>
+                            <div class="fw-bold">กดปุ่มเส้นทางใน Google Maps</div>
+                            <div class="text-muted">
+                                เพื่อดูเส้นทาง ระยะทาง และเริ่มการนำทางไปยังอาคารที่เลือก
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
 
     <hr class="mb-5">
     <footer class="text-center p-3 bg-light" style="position: relative; top: -20px;">
-        © 2025 ระบบค้นหาอาคารภายในโรงเรียนพิบูลมังสาหาร | By Kasemsak
+        © 2025 ระบบค้นหาอาคารภายในโรงเรียนพิบูลมังสาหาร (ทดลองใช้) | Developed By Kasemsak
     </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
 
     <script>
         const buildings = [
-            { name: "อาคาร 10", desc: "อาคารเรียนโปรแกรม AP Programme", img: "../photo/b10.jpg", mapsLink: "https://maps.app.goo.gl/uNfjEbzdJfrsAitk9" },
-            { name: "อาคาร 2", desc: "แผนกวิทยาศาสตร์", img: "https://via.placeholder.com/500x300", mapsLink: "https://maps.app.goo.gl/AicjxiWgmMUX4PAT7" },
-            { name: "สนามกีฬาฟุตบอล", desc: "โซนกลางแจ้ง", img: "https://via.placeholder.com/500x300", mapsLink: "https://maps.app.goo.gl/uNfjEbzdJfrsAitk9" },
-            { name: "อาคารคอมพิวเตอร์", desc: "ห้องคอมฯ และสื่อการสอน", img: "https://via.placeholder.com/500x300", mapsLink: "https://maps.app.goo.gl/uNfjEbzdJfrsAitk9" },
-            { name: "อาคารกิจกรรม", desc: "ห้องประชุม และห้องชมรม", img: "https://via.placeholder.com/500x300", mapsLink: "https://maps.app.goo.gl/uNfjEbzdJfrsAitk9" },
-            { name: "โรงยิม", desc: "สนามกีฬาในร่ม", img: "https://via.placeholder.com/500x300", mapsLink: "https://maps.app.goo.gl/uNfjEbzdJfrsAitk9" },
-            { name: "อาคาร 10 AP", desc: "อาคารเรียนโปรแกรม Advance Program", img: "https://via.placeholder.com/500x300", mapsLink: "https://maps.app.goo.gl/uNfjEbzdJfrsAitk9" },
-            { name: "อาคาร 1", desc: "อาคารเรียน", img: "https://via.placeholder.com/500x300", mapsLink: "https://maps.app.goo.gl/uNfjEbzdJfrsAitk9" },
-            { name: "อาคาร 4", desc: "อาคารเรียน", img: "https://via.placeholder.com/500x300", mapsLink: "https://maps.app.goo.gl/uNfjEbzdJfrsAitk9" }
+            { name: "อาคาร 1", desc: "กลุ่มสาระการเรียนรู้วิทยาศาสตร์และเทคโนโลยี", img: "../photo/b1.jpg", mapsLink: "https://maps.app.goo.gl/uNfjEbzdJfrsAitk9" },
+            { name: "อาคาร 2", desc: "กลุ่มสาระการเรียนรู้ภาษาไทย", img: "../photo/b2.jpg", mapsLink: "https://maps.app.goo.gl/uNfjEbzdJfrsAitk9" },
+            { name: "อาคาร 3", desc: "อาคารเรียน 3", img: "../photo/b3.jpg", mapsLink: "https://maps.app.goo.gl/uNfjEbzdJfrsAitk9" },
+            { name: "อาคาร 4", desc: "กลุ่มสาระการเรียนรู้คณิตศาสตร์", img: "../photo/b4.jpg", mapsLink: "https://maps.app.goo.gl/prEq6mNThELRFoy47" },
+            { name: "อาคาร 5", desc: "กลุ่มสาระการเรียนรู้ภาษาต่างประเทศ", img: "../photo/b5.jpg", mapsLink: "https://maps.app.goo.gl/uNfjEbzdJfrsAitk9" },
+            { name: "อาคาร 6", desc: "กลุ่มสาระการเรียนรู้สังคมศึกษาและวัฒนธรรม", img: "../photo/b6.jpg", mapsLink: "https://maps.app.goo.gl/uNfjEbzdJfrsAitk9" },
+            { name: "อาคาร 7", desc: "อาคารเรียนโปรแกรม IEP Programme", img: "../photo/build7.jpg", mapsLink: "https://maps.app.goo.gl/auDDvUPprawTqEn87" },
+            { name: "อาคาร 8", desc: "อาคารเรียน 8 ICT DEPARTMENT", img: "../photo/b8.jpg", mapsLink: "https://maps.app.goo.gl/uNfjEbzdJfrsAitk9" },
+            { name: "อาคาร 9", desc: "กลุ่มสาระการเรียนรู้ศิลปะและดนตรี", img: "../photo/b9.jpg", mapsLink: "https://maps.app.goo.gl/prEq6mNThELRFoy47" },
+            { name: "อาคาร 10", desc: "อาคารเรียนโปรแกรม AP Programme", img: "../photo/b10.jpg", mapsLink: "https://maps.app.goo.gl/GUgbXn6zEDXfF218A" },
+            { name: "สนามกีฬา", desc: "สนามกีฬาฟุตบอลโรงเรียนพิบูลมังสาหาร", img: "../photo/court.jpg", mapsLink: "https://maps.app.goo.gl/MVZixrL4DNEq9E658" },
+            { name: "โดมอเนกประสงค์", desc: "โดมอเนกประสงค์หรือจัดกิจกรรม", img: "../photo/domphibun.jpg", mapsLink: "https://maps.app.goo.gl/E4kAyz4uXjS8D3236" },
+            { name: "หอประชุมศรีวนาลัย", desc: "หอประชุมติดแอร์หรือจัดกิจกรรม", img: "../photo/swn.jpg", mapsLink: "https://maps.app.goo.gl/KbhiSwaBsSqnjTgU7" },
+            { name: "โรงอาหารครบรอบ 60 ปี", desc: "โรงอาหารครบรอบ 60 ปี โรงเรียนพิบูลมังสาหาร", img: "../photo/canteen60year.jpg", mapsLink: "https://maps.app.goo.gl/uNfjEbzdJfrsAitk9" },
+            { name: "โรงจอดรถนักเรียน", desc: "โรงจอดรถนักเรียน โรงเรียนพิบูลมังสาหาร", img: "../photo/parkcar.jpg", mapsLink: "https://maps.app.goo.gl/uNfjEbzdJfrsAitk9" }
         ];
 
         const container = document.getElementById("buildingContainer");
 
+        function openModal(b) {
+            document.getElementById("modalTitle").textContent = b.name;
+            document.getElementById("modalDesc").textContent = b.desc;
+            document.getElementById("modalImg").src = b.img;
+            document.getElementById("modalMap").href = b.mapsLink;
+
+            new bootstrap.Modal(
+                document.getElementById("detailModal")
+            ).show();
+        }
+
         function renderCards(items) {
             container.innerHTML = "";
+
+            const noResult = document.getElementById("noResult");
+
+            if (items.length === 0) {
+                noResult.style.display = "block";
+                return;
+            } else {
+                noResult.style.display = "none";
+            }
+
             items.forEach(b => {
-                container.innerHTML += `
-                    <div class="col-12 col-md-6 col-lg-4">
-                        <div class="building-card">
-                            <img src="${b.img}" class="building-img">
-                            <div class="p-3">
-                                <h5 class="building-title">${b.name}</h5>
-                                <p class="text-muted m-0">${b.desc}</p>
-                                <a href="${b.mapsLink}" target="_blank" id="btnlocation2"
-                                    class="btn w-100 mt-3">ดูพิกัดอาคาร</a>
-                            </div>
-                        </div>
-                    </div>`;
+                const col = document.createElement("div");
+                col.className = "col-12 col-md-6 col-lg-4";
+
+                col.innerHTML = `
+            <div class="card h-100 shadow-sm" style="border-radius:18px;" id="buildingCard">
+                <img src="${b.img}"
+                     class="card-img-top"
+                     style="height:180px; object-fit:cover; cursor:pointer;
+                            border-radius:18px 18px 0 0;"
+                     alt="${b.name}">
+
+                <div class="card-body" >
+                    <h5 class="fw-bold">${b.name}</h5>
+                    <p class="text-muted small">${b.desc}</p>
+
+                    <button class="btn btn-primary w-100 mt-2" id="btnlocation2">
+                        ดูรายละเอียดและพิกัดอาคาร
+                    </button>
+                </div>
+            </div>
+        `;
+
+                col.querySelector("img").addEventListener("click", () => openModal(b));
+                col.querySelector("button").addEventListener("click", () => openModal(b));
+
+                container.appendChild(col);
             });
         }
 
+        // แสดงทั้งหมด
         renderCards(buildings);
 
-        // ค้นหา
+        // ตัวรันค่าจาก index.html
+        const params = new URLSearchParams(window.location.search);
+        const q = params.get("q");
+
+        if (q) {
+            const searchInput = document.getElementById("searchInput");
+
+            // ใส่คำค้นลงช่องค้นหาอัตโนมัติ
+            searchInput.value = q;
+
+            // กรองอาคารตามคำค้น
+            const filtered = buildings.filter(b =>
+                b.name.toLowerCase().includes(q.toLowerCase())
+            );
+
+            renderCards(filtered);
+        }
+
+        // ค้นหาแบบพิมพ์แล้วกรองทันที
         document.getElementById("searchInput").addEventListener("input", function () {
             const text = this.value.toLowerCase();
-            const filtered = buildings.filter(b => b.name.toLowerCase().includes(text));
+
+            const filtered = buildings.filter(b =>
+                b.name.toLowerCase().includes(text) ||
+                b.desc.toLowerCase().includes(text)
+            );
+
             renderCards(filtered);
         });
+
 
         // ปุ่มสามขีด hamburger //
         function toggleSidebar() {

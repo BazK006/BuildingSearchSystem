@@ -1,6 +1,6 @@
 body {
   font-family: "Prompt", sans-serif;
-  background: #f5f7fa;
+  background: #fafafa;
 }
 
 /* Header ยาววว*/
@@ -68,6 +68,7 @@ header {
 #btnfind {
   background: linear-gradient(135deg, #ff6f00, #ff8f00);
   color: #ffffff;
+  width: 10%;
   border: none;
   transition: 0.4s;
   transform: scale(1);

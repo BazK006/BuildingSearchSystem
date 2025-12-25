@@ -3,7 +3,29 @@ body {
   background: #f5f7fa;
 }
 
-/* เอฟเฟกต์การ์ดเด้งๆ */
+/* Header ยาววว*/
+header {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 999;
+  transition: transform 0.25s ease;
+}
+
+.header-hide {
+  transform: translateY(-100%);
+}
+
+.header-show {
+  transform: translateY(0);
+}
+
+#mainHeader {
+  background: linear-gradient(135deg, #ffeb3b, #ff9800);
+  color: #2e2d2d;
+  border-radius: 0 0 12px 12px;
+}
+
 .building-card {
   transition: transform 0.25s ease, box-shadow 0.25s ease;
   cursor: pointer;
@@ -41,7 +63,6 @@ body {
   transition: 0.4s;
 }
 
-/* แปลงเป็นกากบาทตอนเปิด */
 .hamburger.active div:nth-child(1) {
   transform: rotate(45deg) translate(5px, 7px);
 }
@@ -54,7 +75,6 @@ body {
   transform: rotate(-45deg) translate(5px, -7.5px);
 }
 
-/* Sidebar */
 .sidebar {
   position: fixed;
   top: 0;
@@ -67,17 +87,14 @@ body {
   background-color: #3b486d;
 }
 
-/* เมื่อเปิด */
 .sidebar.active {
   left: 0;
 }
 
-/* เนื้อหาหลัก */
 .content {
   padding: 20px;
 }
 
-/* Background มืดตอน Sidebar เปิด */
 .overlay {
   position: fixed;
   top: 0;
@@ -123,4 +140,27 @@ a.d-block:hover {
 
 .back-btn:active {
   transform: scale(0.95);
+}
+
+.zoom-img {
+  max-width: 100%;
+  transition: transform 0.25s ease;
+  cursor: zoom-in;
+}
+
+.zoom-img.zoomed {
+  transform: scale(2);
+  cursor: zoom-out;
+}
+
+.zoom-icon {
+  position: absolute;
+  bottom: 15px;
+  right: 15px;
+  background: rgba(0, 0, 0, 0.6);
+  color: #fff;
+  padding: 6px 10px;
+  border-radius: 50%;
+  font-size: 18px;
+  pointer-events: none; /* คลิกทะลุ */
 }
