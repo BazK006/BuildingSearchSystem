@@ -25,14 +25,20 @@
                     <h4 class="m-1 fst-italic">ระบบค้นหาอาคาร</h4>
                 </a>
             </div>
-            <button id="backBtn" class="btn btn-outline-primary btn-sm ms-auto">
-                ← กลับ
-            </button>
+
+            <!-- Desktop Menu -->
+            <nav class="d-none d-lg-flex gap-5 ps-lg-5">
+                <a href="../index.html" class="nav-link fw-semibold">หน้าหลัก</a>
+                <a href="about.html" class="nav-link fw-semibold">เกี่ยวกับ</a>
+                <a href="BuildingFindSystem.html" class="nav-link fw-semibold">ค้นหาอาคาร</a>
+                <a href="schoolmap.html" class="nav-link fw-semibold">แผนที่</a>
+                <a href="buildall.html" class="nav-link fw-semibold">อาคารทั้งหมด</a>
+            </nav>
         </div>
     </header>
 
     <!-- ปุ่ม Hamburger -->
-    <button class="hamburger" onclick="toggleSidebar()">
+    <button class="hamburger d-lg-none" onclick="toggleSidebar()">
         <div></div>
         <div></div>
         <div></div>
@@ -41,6 +47,7 @@
     <!-- Sidebar -->
     <div class="sidebar pt-5" id="sidebar">
         <a class='d-block p-3 text-white text-decoration-none' href="../index.html">หน้าหลัก</a>
+        <a class='d-block p-3 text-white text-decoration-none' href="about.html">เกี่ยวกับ</a>
         <a class='d-block p-3 text-white text-decoration-none' href="BuildingFindSystem.html">ระบบค้นหาอาคาร</a>
         <a class='d-block p-3 text-white text-decoration-none' href="schoolmap.html">แผนที่ภายในโรงเรียน</a>
         <a class='d-block p-3 text-white text-decoration-none' href="buildall.html">อาคารทั้งหมด</a>
@@ -53,7 +60,7 @@
 
         <!-- Title + Search -->
         <div class="d-flex flex-column flex-md-row align-items-md-center justify-content-between mb-4 gap-3">
-            <h2 class="fw-bold mb-0 text-center text-md-start">
+            <h2 class="fw-bold mb-0 text-center text-md-start fade-in">
                 ระบบค้นหาอาคารภายในโรงเรียน
             </h2>
 
@@ -65,7 +72,7 @@
         <hr>
 
         <!-- Cards -->
-        <div class="row g-4 justify-content-center" id="buildingContainer"></div>
+        <div class="row g-4 justify-content-center card-group-animate" id="buildingContainer"></div>
         <div id="noResult" class="text-center text-muted mt-5" style="display: none;">
             🔍 ไม่พบอาคารที่ค้นหา
         </div>
@@ -97,7 +104,7 @@
         </div>
     </div>
 
-    <div class="box1" style="height: 500px;"></div>
+    <div class="box1" style="height: 200px;"></div>
 
     <!-- วิธีใช้ -->
     <div class="container my-5">
@@ -182,21 +189,27 @@
 
     <script>
         const buildings = [
-            { name: "อาคาร 1", desc: "กลุ่มสาระการเรียนรู้วิทยาศาสตร์และเทคโนโลยี", img: "../photo/b1.jpg", mapsLink: "https://maps.app.goo.gl/uNfjEbzdJfrsAitk9" },
-            { name: "อาคาร 2", desc: "กลุ่มสาระการเรียนรู้ภาษาไทย", img: "../photo/b2.jpg", mapsLink: "https://maps.app.goo.gl/uNfjEbzdJfrsAitk9" },
-            { name: "อาคาร 3", desc: "อาคารเรียน 3", img: "../photo/b3.jpg", mapsLink: "https://maps.app.goo.gl/uNfjEbzdJfrsAitk9" },
-            { name: "อาคาร 4", desc: "กลุ่มสาระการเรียนรู้คณิตศาสตร์", img: "../photo/b4.jpg", mapsLink: "https://maps.app.goo.gl/prEq6mNThELRFoy47" },
-            { name: "อาคาร 5", desc: "กลุ่มสาระการเรียนรู้ภาษาต่างประเทศ", img: "../photo/b5.jpg", mapsLink: "https://maps.app.goo.gl/uNfjEbzdJfrsAitk9" },
-            { name: "อาคาร 6", desc: "กลุ่มสาระการเรียนรู้สังคมศึกษาและวัฒนธรรม", img: "../photo/b6.jpg", mapsLink: "https://maps.app.goo.gl/uNfjEbzdJfrsAitk9" },
-            { name: "อาคาร 7", desc: "อาคารเรียนโปรแกรม IEP Programme", img: "../photo/build7.jpg", mapsLink: "https://maps.app.goo.gl/auDDvUPprawTqEn87" },
-            { name: "อาคาร 8", desc: "อาคารเรียน 8 ICT DEPARTMENT", img: "../photo/b8.jpg", mapsLink: "https://maps.app.goo.gl/uNfjEbzdJfrsAitk9" },
-            { name: "อาคาร 9", desc: "กลุ่มสาระการเรียนรู้ศิลปะและดนตรี", img: "../photo/b9.jpg", mapsLink: "https://maps.app.goo.gl/prEq6mNThELRFoy47" },
-            { name: "อาคาร 10", desc: "อาคารเรียนโปรแกรม AP Programme", img: "../photo/b10.jpg", mapsLink: "https://maps.app.goo.gl/GUgbXn6zEDXfF218A" },
-            { name: "สนามกีฬา", desc: "สนามกีฬาฟุตบอลโรงเรียนพิบูลมังสาหาร", img: "../photo/court.jpg", mapsLink: "https://maps.app.goo.gl/MVZixrL4DNEq9E658" },
-            { name: "โดมอเนกประสงค์", desc: "โดมอเนกประสงค์หรือจัดกิจกรรม", img: "../photo/domphibun.jpg", mapsLink: "https://maps.app.goo.gl/E4kAyz4uXjS8D3236" },
-            { name: "หอประชุมศรีวนาลัย", desc: "หอประชุมติดแอร์หรือจัดกิจกรรม", img: "../photo/swn.jpg", mapsLink: "https://maps.app.goo.gl/KbhiSwaBsSqnjTgU7" },
-            { name: "โรงอาหารครบรอบ 60 ปี", desc: "โรงอาหารครบรอบ 60 ปี โรงเรียนพิบูลมังสาหาร", img: "../photo/canteen60year.jpg", mapsLink: "https://maps.app.goo.gl/uNfjEbzdJfrsAitk9" },
-            { name: "โรงจอดรถนักเรียน", desc: "โรงจอดรถนักเรียน โรงเรียนพิบูลมังสาหาร", img: "../photo/parkcar.jpg", mapsLink: "https://maps.app.goo.gl/uNfjEbzdJfrsAitk9" }
+            { name: "อาคาร 1", desc: "กลุ่มสาระการเรียนรู้วิทยาศาสตร์และเทคโนโลยี", img: "../photo/b1.jpg", mapsLink: "https://maps.app.goo.gl/nZFH8kwD6MDAuQiz8" },
+            { name: "อาคาร 2", desc: "กลุ่มสาระการเรียนรู้ภาษาไทย", img: "../photo/b2.jpg", mapsLink: "https://maps.app.goo.gl/fxMauFn8NfmZigus6" },
+            { name: "อาคาร 3", desc: "อาคารเรียน 3", img: "../photo/b3.jpg", mapsLink: "https://maps.app.goo.gl/qRpjWGfwyvYGYNSJ7" },
+            { name: "อาคาร 4", desc: "กลุ่มสาระการเรียนรู้คณิตศาสตร์", img: "../photo/b4.jpg", mapsLink: "https://maps.app.goo.gl/xrUJxdd7ujcuT6Vr7" },
+            { name: "อาคาร 5", desc: "กลุ่มสาระการเรียนรู้ภาษาต่างประเทศ", img: "../photo/b5.jpg", mapsLink: "https://maps.app.goo.gl/vja6D4NVZzo4AQyS9" },
+            { name: "อาคาร 6", desc: "กลุ่มสาระการเรียนรู้สังคมศึกษาและวัฒนธรรม", img: "../photo/b6.jpg", mapsLink: "https://maps.app.goo.gl/vi1P3aN9jSsYHzb97" },
+            { name: "อาคาร 7", desc: "อาคารเรียนโปรแกรม IEP Programme", img: "../photo/build7.jpg", mapsLink: "https://maps.app.goo.gl/VYp2mtXVE7xHLMvw87" },
+            { name: "อาคาร 8", desc: "อาคารเรียน 8 ICT DEPARTMENT", img: "../photo/b8.jpg", mapsLink: "https://maps.app.goo.gl/uchkkTjDrey34NQX7" },
+            { name: "อาคาร 9", desc: "กลุ่มสาระการเรียนรู้ศิลปะและดนตรี", img: "../photo/b9.jpg", mapsLink: "https://maps.app.goo.gl/FW5H3qhPBiEziDqZ6" },
+            { name: "อาคาร 10", desc: "อาคารเรียนโปรแกรม AP Programme", img: "../photo/b10.jpg", mapsLink: "https://maps.app.goo.gl/yAxLa6RyWtNFLgpRA" },
+            { name: "สนามกีฬา", desc: "สนามกีฬาฟุตบอลโรงเรียนพิบูลมังสาหาร", img: "../photo/court.jpg", mapsLink: "https://maps.app.goo.gl/ND8TqQQWvzhLcnV56" },
+            { name: "โดมอเนกประสงค์", desc: "โดมอเนกประสงค์หรือจัดกิจกรรม", img: "../photo/domphibun.jpg", mapsLink: "https://maps.app.goo.gl/rvbWmnPwQ9DjEcZ39" },
+            { name: "หอประชุมศรีวนาลัย", desc: "หอประชุมติดแอร์หรือจัดกิจกรรม", img: "../photo/swn.jpg", mapsLink: "https://maps.app.goo.gl/aFYGLXQBPDXPPTTQ7" },
+            { name: "โรงอาหารครบรอบ 60 ปี", desc: "โรงอาหารครบรอบ 60 ปี โรงเรียนพิบูลมังสาหาร", img: "../photo/canteen60year.jpg", mapsLink: "https://maps.app.goo.gl/R7w5Pp6SJSHnrdKf8" },
+            { name: "โรงจอดรถนักเรียน", desc: "โรงจอดรถนักเรียน โรงเรียนพิบูลมังสาหาร", img: "../photo/parkcar.jpg", mapsLink: "https://maps.app.goo.gl/CLKxWNiq3jzYiT6YA" },
+            { name: "ประตู 1", desc: "หน้าโรงเรียน ประตู 1", img: "../photo/", mapsLink: "https://maps.app.goo.gl/JK7ivyJXjFs8Mwqz9" },
+            { name: "ประตู 2", desc: "หน้าโรงเรียน ประตู 2", img: "../photo/", mapsLink: "https://maps.app.goo.gl/4Jn1m8zvAv8QaFvL7" },
+            { name: "ประตู 3", desc: "หลังโรงเรียน ประตู 3", img: "../photo/", mapsLink: "https://maps.app.goo.gl/kjgL1M36hjmxoHjB9" },
+            { name: "", desc: "", img: "../photo/", mapsLink: "" },
+            { name: "", desc: "", img: "../photo/", mapsLink: "" },
+            { name: "", desc: "", img: "../photo/", mapsLink: "" }
         ];
 
         const container = document.getElementById("buildingContainer");
@@ -322,14 +335,24 @@
             lastScroll = currentScroll;
         });
 
-
-        document.getElementById("backBtn").addEventListener("click", () => {
-            if (window.history.length > 1) {
-                window.history.back();
-            } else {
-                window.location.href = "index.html"; // เผื่อเปิดมาหน้าแรกเลย ให้กลับไปหน้า Home
+        // Animation Building Card
+        const group = document.getElementById("buildingContainer");
+        const groupObserver = new IntersectionObserver(
+            entries => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add("show");
+                        groupObserver.unobserve(entry.target);
+                    }
+                });
+            },
+            {
+                threshold: 0.2,
+                rootMargin: "0px 0px -80px 0px"
             }
-        });
+        );
+
+        groupObserver.observe(group);
     </script>
 
 </body>

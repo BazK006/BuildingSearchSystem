@@ -92,7 +92,11 @@ h1 {
   transition: 0.4s;
   z-index: 1050;
   overflow-y: auto;
-  background-color: #3b486d;
+  background: rgba(25, 35, 70, 0.75);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-right: 1px solid rgba(255, 255, 255, 0.15);
+  box-shadow: 4px 0 20px rgba(0, 0, 0, 0.3);
 }
 
 /* เมื่อเปิด */
@@ -122,7 +126,9 @@ h1 {
 }
 
 a.d-block {
-  transition: background-color 0.3s, color 0.3s;
+  transition:
+    background-color 0.3s,
+    color 0.3s;
 }
 
 a.d-block:hover {
@@ -131,35 +137,61 @@ a.d-block:hover {
   color: black;
 }
 
-.map-animate {
+/* Animaton Header 1*/
+.animate-title {
   opacity: 0;
-  transform: scale(0.95);
-  transition: all 0.4s ease;
+  transform: translateY(25px);
+  transition:
+    opacity 0.7s ease,
+    transform 0.7s ease;
 }
 
-.map-animate.show {
+.animate-title.show {
   opacity: 1;
-  transform: scale(1);
+  transform: translateY(0);
 }
 
-.back-btn {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  border: none;
-  background: #f8f9fa;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
-  font-size: 20px;
-  cursor: pointer;
+/* ===== Map Animation ===== */
+.map-animate,
+.map-img-animate,
+.map-text-animate,
+.map-btn-animate {
+  opacity: 0;
+  transform: translateY(40px);
+  transition: all 0.8s ease;
+}
+
+.map-animate.show,
+.map-img-animate.show,
+.map-text-animate.show,
+.map-btn-animate.show {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.nav-link {
+  color: #333;
+  position: relative;
+  padding-bottom: 6px;
+  transition: color 0.25s ease;
+}
+
+.nav-link::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  bottom: 0;
+  width: 0;
+  height: 2px;
+  background-color: #1e3a8a;
   transition: all 0.25s ease;
+  transform: translateX(-50%);
 }
 
-.back-btn:hover {
-  background: #0d6efd;
-  color: white;
-  transform: scale(1.1);
+.nav-link:hover {
+  color: #1e3a8a;
 }
 
-.back-btn:active {
-  transform: scale(0.95);
+.nav-link:hover::after {
+  width: 100%;
 }

@@ -28,14 +28,19 @@
                     <h4 class="m-1 fst-italic">อาคารทั้งหมด</h4>
                 </a>
             </div>
-            <button id="backBtn" class="btn btn-outline-primary btn-sm ms-auto">
-                ← กลับ
-            </button>
+            <!-- Desktop Menu -->
+            <nav class="d-none d-lg-flex gap-5 ps-lg-5">
+                <a href="../index.html" class="nav-link fw-semibold">หน้าหลัก</a>
+                <a href="about.html" class="nav-link fw-semibold">เกี่ยวกับ</a>
+                <a href="BuildingFindSystem.html" class="nav-link fw-semibold">ค้นหาอาคาร</a>
+                <a href="schoolmap.html" class="nav-link fw-semibold">แผนที่</a>
+                <a href="buildall.html" class="nav-link fw-semibold">อาคารทั้งหมด</a>
+            </nav>
         </div>
     </header>
 
     <!-- ปุ่ม Hamburger -->
-    <button class="hamburger" onclick="toggleSidebar()">
+    <button class="hamburger d-lg-none" onclick="toggleSidebar()">
         <div></div>
         <div></div>
         <div></div>
@@ -44,6 +49,7 @@
     <!-- Sidebar -->
     <div class="sidebar pt-5" id="sidebar">
         <a class='d-block p-3 text-white text-decoration-none' href="../index.html">หน้าหลัก</a>
+        <a class='d-block p-3 text-white text-decoration-none' href="about.html">เกี่ยวกับ</a>
         <a class='d-block p-3 text-white text-decoration-none' href="BuildingFindSystem.html">ระบบค้นหาอาคาร</a>
         <a class='d-block p-3 text-white text-decoration-none' href="schoolmap.html">แผนที่ภายในโรงเรียน</a>
         <a class='d-block p-3 text-white text-decoration-none' href="buildall.html">อาคารทั้งหมด</a>
@@ -63,7 +69,7 @@
 
             <!-- อาคาร 1-->
             <div class="col-md-3 col-sm-6">
-                <div class="card shadow building-card open-modal" data-img="../photo/b1.jpg">
+                <div class="card shadow building-card open-modal animate-card " data-img="../photo/b1.jpg">
                     <img src="../photo/b1.jpg" class="card-img-top" alt="">
                     <div class="card-body">
                         <h5 class="card-title text-left">อาคาร 1</h5>
@@ -74,7 +80,7 @@
 
             <!-- อาคาร 2-->
             <div class="col-md-3 col-sm-6">
-                <div class="card shadow building-card open-modal" data-img="../photo/b2.jpg">
+                <div class="card shadow building-card open-modal animate-card" data-img="../photo/b2.jpg">
                     <img src="../photo/b2.jpg" class="card-img-top" alt="">
                     <div class="card-body">
                         <h5 class="card-title text-left">อาคาร 2</h5>
@@ -85,7 +91,7 @@
 
             <!-- อาคาร 3-->
             <div class="col-md-3 col-sm-6">
-                <div class="card shadow building-card open-modal" data-img="../photo/b3.jpg">
+                <div class="card shadow building-card open-modal animate-card" data-img="../photo/b3.jpg">
                     <img src="../photo/b3.jpg" class="card-img-top" alt="">
                     <div class="card-body">
                         <h5 class="card-title text-left">อาคาร 3</h5>
@@ -96,7 +102,7 @@
 
             <!-- อาคาร 4 -->
             <div class="col-md-3 col-sm-6">
-                <div class="card shadow building-card open-modal" data-img="../photo/b4.jpg">
+                <div class="card shadow building-card open-modal animate-card" data-img="../photo/b4.jpg">
                     <img src="../photo/b4.jpg" class="card-img-top" alt="">
                     <div class="card-body">
                         <h5 class="card-title text-left">อาคาร 4</h5>
@@ -107,7 +113,7 @@
 
             <!-- อาคาร 5 -->
             <div class="col-md-3 col-sm-6">
-                <div class="card shadow building-card open-modal" data-img="../photo/b5.jpg">
+                <div class="card shadow building-card open-modal animate-card" data-img="../photo/b5.jpg">
                     <img src="../photo/b5.jpg" class="card-img-top" alt="">
                     <div class="card-body">
                         <h5 class="card-title text-left">อาคาร 5</h5>
@@ -118,7 +124,7 @@
 
             <!-- อาคาร 6 -->
             <div class="col-md-3 col-sm-6">
-                <div class="card shadow building-card open-modal" data-img="../photo/b6.jpg">
+                <div class="card shadow building-card open-modal animate-card" data-img="../photo/b6.jpg">
                     <img src="../photo/b6.jpg" class="card-img-top" alt="">
                     <div class="card-body">
                         <h5 class="card-title text-left">อาคาร 6</h5>
@@ -129,7 +135,7 @@
 
             <!-- อาคาร 7 -->
             <div class="col-md-3 col-sm-6">
-                <div class="card shadow building-card open-modal" data-img="../photo/build7.jpg">
+                <div class="card shadow building-card open-modal animate-card" data-img="../photo/build7.jpg">
                     <img src="../photo/build7.jpg" class="card-img-top" alt="">
                     <div class="card-body">
                         <h5 class="card-title text-left">อาคาร 7 IEP Programme</h5>
@@ -140,7 +146,7 @@
 
             <!-- อาคาร 8 -->
             <div class="col-md-3 col-sm-6">
-                <div class="card shadow building-card open-modal" data-img="../photo/b8.jpg">
+                <div class="card shadow building-card open-modal animate-card" data-img="../photo/b8.jpg">
                     <img src="../photo/b8.jpg" class="card-img-top" alt="">
                     <div class="card-body">
                         <h5 class="card-title text-left">อาคาร 8 ICT DEPARTMENT</h5>
@@ -151,7 +157,7 @@
 
             <!-- อาคาร 9 -->
             <div class="col-md-3 col-sm-6">
-                <div class="card shadow building-card open-modal" data-img="../photo/b9.jpg">
+                <div class="card shadow building-card open-modal animate-card" data-img="../photo/b9.jpg">
                     <img src="../photo/b9.jpg" class="card-img-top" alt="">
                     <div class="card-body">
                         <h5 class="card-title text-left">อาคาร 9</h5>
@@ -162,7 +168,7 @@
 
             <!-- อาคาร 10-->
             <div class="col-md-3 col-sm-6">
-                <div class="card shadow building-card open-modal" data-img="../photo/b10.jpg">
+                <div class="card shadow building-card open-modal animate-card" data-img="../photo/b10.jpg">
                     <img src="../photo/b10.jpg" class="card-img-top" alt="">
                     <div class="card-body">
                         <h5 class="card-title text-left">อาคาร 10</h5>
@@ -173,7 +179,7 @@
 
             <!-- สนามกีฬา -->
             <div class="col-md-3 col-sm-6">
-                <div class="card shadow building-card open-modal" data-img="../photo/court.jpg">
+                <div class="card shadow building-card open-modal animate-card" data-img="../photo/court.jpg">
                     <img src="../photo/court.jpg" class="card-img-top" alt="">
                     <div class="card-body">
                         <h5 class="card-title text-left">สนามกีฬา</h5>
@@ -184,7 +190,7 @@
 
             <!-- โดม -->
             <div class="col-md-3 col-sm-6">
-                <div class="card shadow building-card open-modal" data-img="../photo/domphibun.jpg">
+                <div class="card shadow building-card open-modal animate-card" data-img="../photo/domphibun.jpg">
                     <img src="../photo/domphibun.jpg" class="card-img-top" alt="">
                     <div class="card-body">
                         <h5 class="card-title text-left">โดมอเนกประสงค์</h5>
@@ -195,7 +201,7 @@
 
             <!-- หอประชุม -->
             <div class="col-md-3 col-sm-6">
-                <div class="card shadow building-card open-modal" data-img="../photo/swn.jpg">
+                <div class="card shadow building-card open-modal animate-card" data-img="../photo/swn.jpg">
                     <img src="../photo/swn.jpg" class="card-img-top" alt="">
                     <div class="card-body">
                         <h5 class="card-title text-left">หอประชุมศรีวนาลัย</h5>
@@ -206,7 +212,7 @@
 
             <!-- โรงอาหารใหม่ -->
             <div class="col-md-3 col-sm-6">
-                <div class="card shadow building-card open-modal" data-img="../photo/canteen60year.jpg">
+                <div class="card shadow building-card open-modal animate-card" data-img="../photo/canteen60year.jpg">
                     <img src="../photo/canteen60year.jpg" class="card-img-top" alt="">
                     <div class="card-body">
                         <h5 class="card-title text-left">อาคารโรงอาหาร 60 ปี</h5>
@@ -217,7 +223,7 @@
 
             <!-- โรงจอดรถ -->
             <div class="col-md-3 col-sm-6">
-                <div class="card shadow building-card open-modal" data-img="../photo/parkcar.jpg">
+                <div class="card shadow building-card open-modal animate-card" data-img="../photo/parkcar.jpg">
                     <img src="../photo/parkcar.jpg" class="card-img-top" alt="">
                     <div class="card-body">
                         <h5 class="card-title text-left">โรงจอดรถนักเรียน</h5>
@@ -228,7 +234,7 @@
 
             <!-- อาคาร -->
             <div class="col-md-3 col-sm-6">
-                <div class="card shadow building-card open-modal" data-img="../photo/">
+                <div class="card shadow building-card open-modal animate-card" data-img="../photo/">
                     <img src="../photo/" class="card-img-top" alt="">
                     <div class="card-body">
                         <h5 class="card-title text-left">อาคาร</h5>
@@ -239,7 +245,7 @@
 
             <!-- อาคาร -->
             <div class="col-md-3 col-sm-6">
-                <div class="card shadow building-card open-modal" data-img="../photo/">
+                <div class="card shadow building-card open-modal animate-card" data-img="../photo/">
                     <img src="../photo/" class="card-img-top" alt="">
                     <div class="card-body">
                         <h5 class="card-title text-left">อาคาร</h5>
@@ -250,7 +256,7 @@
 
             <!-- อาคาร -->
             <div class="col-md-3 col-sm-6">
-                <div class="card shadow building-card open-modal" data-img="../photo/">
+                <div class="card shadow building-card open-modal animate-card" data-img="../photo/">
                     <img src="../photo/" class="card-img-top" alt="">
                     <div class="card-body">
                         <h5 class="card-title text-left">อาคาร</h5>
@@ -261,7 +267,7 @@
 
             <!-- อาคาร -->
             <div class="col-md-3 col-sm-6">
-                <div class="card shadow building-card open-modal" data-img="../photo/">
+                <div class="card shadow building-card open-modal animate-card" data-img="../photo/">
                     <img src="../photo/" class="card-img-top" alt="">
                     <div class="card-body">
                         <h5 class="card-title text-left">อาคาร</h5>
@@ -272,7 +278,7 @@
 
             <!-- อาคาร -->
             <div class="col-md-3 col-sm-6">
-                <div class="card shadow building-card open-modal" data-img="../photo/">
+                <div class="card shadow building-card open-modal animate-card" data-img="../photo/">
                     <img src="../photo/" class="card-img-top" alt="">
                     <div class="card-body">
                         <h5 class="card-title text-left">อาคาร</h5>
@@ -348,6 +354,22 @@
                 modal.show();
             });
         });
+
+        const cards = document.querySelectorAll(".animate-card");
+
+        const observer = new IntersectionObserver(
+            (entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add("show");
+                        observer.unobserve(entry.target);
+                    }
+                });
+            },
+            { threshold: 0.15 }
+        );
+
+        cards.forEach(card => observer.observe(card));
     </script>
 
 </body>

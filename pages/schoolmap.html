@@ -25,14 +25,20 @@
                     <h4 class="m-1 fst-italic">แผนที่ภายในโรงเรียน</h4>
                 </a>
             </div>
-            <button id="backBtn" class="btn btn-outline-primary btn-sm ms-auto">
-                ← กลับ
-            </button>
+
+            <!-- Desktop Menu -->
+            <nav class="d-none d-lg-flex gap-5 ps-lg-5">
+                <a href="../index.html" class="nav-link fw-semibold">หน้าหลัก</a>
+                <a href="about.html" class="nav-link fw-semibold">เกี่ยวกับ</a>
+                <a href="BuildingFindSystem.html" class="nav-link fw-semibold">ค้นหาอาคาร</a>
+                <a href="schoolmap.html" class="nav-link fw-semibold">แผนที่</a>
+                <a href="buildall.html" class="nav-link fw-semibold">อาคารทั้งหมด</a>
+            </nav>
         </div>
     </header>
 
     <!-- ปุ่ม Hamburger -->
-    <button class="hamburger" onclick="toggleSidebar()">
+    <button class="hamburger d-lg-none" onclick="toggleSidebar()">
         <div></div>
         <div></div>
         <div></div>
@@ -41,6 +47,7 @@
     <!-- Sidebar -->
     <div class="sidebar pt-5" id="sidebar">
         <a class='d-block p-3 text-white text-decoration-none' href="../index.html">หน้าหลัก</a>
+        <a class='d-block p-3 text-white text-decoration-none' href="about.html">เกี่ยวกับ</a>
         <a class='d-block p-3 text-white text-decoration-none' href="BuildingFindSystem.html">ระบบค้นหาอาคาร</a>
         <a class='d-block p-3 text-white text-decoration-none' href="schoolmap.html">แผนที่ภายในโรงเรียน</a>
         <a class='d-block p-3 text-white text-decoration-none' href="buildall.html">อาคารทั้งหมด</a>
@@ -53,10 +60,11 @@
         <h1 class="text-start fw-bold mb-2 fs-1">
             แผนที่ภายในโรงเรียนพิบูลมังสาหาร
         </h1>
+
         <hr>
 
         <div class="text-center">
-            <img src="../photo/map/pmfullmap.jpg" class="img-fluid rounded shadow" alt="แผนที่โรงเรียน"
+            <img src="../photo/map/pmfullmap.jpg" class="img-fluid rounded shadow map-img-animate" alt="แผนที่โรงเรียน"
                 style="max-width: 900px; width: 100%;">
         </div>
 
@@ -75,14 +83,15 @@
                 </div>
             </div>
 
-            <p class="mt-3 text-center text-muted">
+            <p class="mt-3 text-center text-muted map-text-animate">
                 แสดงตำแหน่งโรงเรียน พร้อมระบบนำทางแบบเรียลไทม์
                 เพื่อช่วยให้ผู้มาติดต่อสามารถเดินทางได้สะดวกและรวดเร็ว
             </p>
         </div>
 
         <a href="https://maps.app.goo.gl/2m4k7JctsfUwUQ8c9" id="btnlocation"
-            class="btn btn-lg d-block mx-auto text-center" style="margin-top: 10px; max-width: 320px; width: 100%;">
+            class="btn btn-lg d-block mx-auto text-center map-btn-animate"
+            style="margin-top: 10px; max-width: 320px; width: 100%;">
             กดเพื่อดูพิกัดโรงเรียน!
         </a>
     </div>
@@ -130,15 +139,25 @@
             mapBox.classList.add("show");
         });
 
-        // กลับไปหน้าก่อนหน้า
-        document.getElementById("backBtn").addEventListener("click", () => {
-            if (window.history.length > 1) {
-                window.history.back();
-            } else {
-                window.location.href = "index.html"; // เผื่อเปิดมาหน้าแรกเลย ให้กลับไปหน้า Home
-            }
-        });
+        // Map Animation 
+        const mapItems = document.querySelectorAll(
+            ".map-animate, .map-img-animate, .map-text-animate, .map-btn-animate"
+        );
 
+        const mapObserver = new IntersectionObserver(
+            entries => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add("show");
+                    }
+                });
+            },
+            {
+                threshold: 0.2
+            }
+        );
+
+        mapItems.forEach(item => mapObserver.observe(item));
     </script>
 
 </body>

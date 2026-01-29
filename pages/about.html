@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>เกี่ยวกับ | โรงเรียนพิบูลมังสาหาร</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="../assets/css/aboutcss.css">
+</head>
+
+<body>
+    <header id="mainHeader" class="shadow-sm bg-white">
+        <div class="container py-3 d-flex flex-column flex-md-row 
+                justify-content-between align-items-center text-center text-md-start">
+            <a href="../index.html" style="text-decoration: none; color: black;">
+                <div class="d-flex align-items-center gap-2">
+                    <img src="../photo/pmlogo.png" alt="โลโก้โรงเรียน" width="38" height="36" class="img-fluid">
+
+                    <h4 class="m-0 fst-italic">
+                        เกี่ยวกับ
+                    </h4>
+                </div>
+            </a>
+
+            <!-- Desktop Menu -->
+            <nav class="d-none d-lg-flex gap-5 ps-lg-5">
+                <a href="../index.html" class="nav-link fw-semibold">หน้าหลัก</a>
+                <a href="about.html" class="nav-link fw-semibold">เกี่ยวกับ</a>
+                <a href="BuildingFindSystem.html" class="nav-link fw-semibold">ค้นหาอาคาร</a>
+                <a href="schoolmap.html" class="nav-link fw-semibold">แผนที่</a>
+                <a href="buildall.html" class="nav-link fw-semibold">อาคารทั้งหมด</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- ปุ่ม Hamburger -->
+    <button class="hamburger d-lg-none" onclick="toggleSidebar()">
+        <div></div>
+        <div></div>
+        <div></div>
+    </button>
+
+    <!-- Sidebar -->
+    <div class="sidebar pt-5" id="sidebar">
+        <a class='d-block p-3 text-white text-decoration-none' href="index.html">หน้าหลัก</a>
+        <a class='d-block p-3 text-white text-decoration-none' href="pages/about.html">เกี่ยวกับ</a>
+        <a class='d-block p-3 text-white text-decoration-none' href="pages/BuildingFindSystem.html">ระบบค้นหาอาคาร</a>
+        <a class='d-block p-3 text-white text-decoration-none' href="pages/schoolmap.html">แผนที่ภายในโรงเรียน</a>
+        <a class='d-block p-3 text-white text-decoration-none' href="pages/buildall.html">อาคารทั้งหมด</a>
+    </div>
+
+    <!-- Overlay มืดด้านหลัง -->
+    <div class="overlay" id="overlay" onclick="toggleSidebar()"></div>
+
+    <!-- Hero -->
+    <section class="hero-about">
+        <h1>เกี่ยวกับระบบค้นหาอาคาร</h1>
+        <p class="mt-2 fs-5">
+            ระบบค้นหาอาคารภายในโรงเรียนพิบูลมังสาหาร
+        </p>
+    </section>
+
+    <!-- Content -->
+    <div class="container my-5">
+        <div class="row g-4">
+
+            <!-- About System -->
+            <div class="col-lg-6">
+                <div class="about-card h-100 fade-left">
+                    <h4 class="fw-bold mb-3">📌 ระบบนี้คืออะไร?</h4>
+                    <p class="text-muted">
+                        ระบบค้นหาอาคารภายในโรงเรียนพิบูลมังสาหาร
+                        ถูกพัฒนาขึ้นเพื่อช่วยให้นักเรียน ครู ผู้ปกครอง
+                        และผู้มาเยี่ยมชม สามารถค้นหาอาคาร ห้องเรียน
+                        และสถานที่สำคัญภายในโรงเรียนได้อย่างสะดวกและรวดเร็ว
+                    </p>
+                    <p class="text-muted">
+                        ผู้ใช้งานสามารถค้นหาชื่ออาคาร
+                        ดูตำแหน่งบนแผนที่ และกดนำทางผ่าน Google Maps
+                        ได้ทันที ลดเวลาในการหลงทางและเพิ่มความสะดวกในการใช้งาน
+                    </p>
+                </div>
+            </div>
+
+            <!-- Objectives -->
+            <div class="col-lg-6">
+                <div class="about-card h-100 fade-right">
+                    <h4 class="fw-bold mb-3">🎯 วัตถุประสงค์ของระบบ</h4>
+                    <ul class="text-muted">
+                        <li>ช่วยค้นหาอาคารและสถานที่ภายในโรงเรียนได้ง่าย</li>
+                        <li>ลดความสับสนสำหรับนักเรียนใหม่และผู้มาเยี่ยมชม</li>
+                        <li>แสดงตำแหน่งอาคารพร้อมเส้นทางนำทาง</li>
+                        <li>รองรับการใช้งานทั้งมือถือและคอมพิวเตอร์</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Background & Importance -->
+            <div class="col-12">
+                <div class="about-card h-100 fade-up">
+                    <h4 class="fw-bold mb-3">📖 ที่มาและความสำคัญของระบบ</h4>
+                    <p class="text-muted">
+                        โรงเรียนพิบูลมังสาหารเป็นโรงเรียนที่มีพื้นที่กว้าง
+                        และมีอาคารเรียน สถานที่ และสิ่งอำนวยความสะดวกจำนวนมาก
+                        ทำให้นักเรียนใหม่ ผู้ปกครอง และผู้มาเยี่ยมชม
+                        อาจเกิดความสับสนในการค้นหาอาคารหรือสถานที่ต่าง ๆ ภายในโรงเรียน
+                    </p>
+                    <p class="text-muted">
+                        ระบบค้นหาอาคารภายในโรงเรียนจึงถูกพัฒนาขึ้น
+                        เพื่อช่วยแก้ไขปัญหาดังกล่าว โดยนำเทคโนโลยีเว็บไซต์
+                        และแผนที่ดิจิทัลมาประยุกต์ใช้
+                        ช่วยให้ผู้ใช้งานสามารถค้นหาข้อมูลอาคาร
+                        และนำทางไปยังจุดหมายได้อย่างสะดวก รวดเร็ว และแม่นยำ
+                    </p>
+                    <p class="text-muted">
+                        ระบบนี้ไม่เพียงช่วยอำนวยความสะดวกแก่ผู้ใช้งาน
+                        แต่ยังเป็นการส่งเสริมการใช้เทคโนโลยีสารสนเทศ
+                        เพื่อพัฒนาระบบภายในโรงเรียนให้ทันสมัยมากยิ่งขึ้น
+                    </p>
+                </div>
+            </div>
+
+            <div class="col-12">
+                <div class="about-card h-100 fade-up">
+                    <h4 class="fw-bold mb-3">🧩 ขอบเขตของระบบ</h4>
+                    <ul class="text-muted">
+                        <li>ระบบสามารถค้นหาข้อมูลอาคารและสถานที่ภายในโรงเรียน</li>
+                        <li>ระบบสามารถแสดงตำแหน่งอาคารผ่านแผนที่</li>
+                        <li>ระบบสามารถเชื่อมต่อ Google Maps เพื่อการนำทาง</li>
+                        <li>ระบบไม่ครอบคลุมข้อมูลภายนอกพื้นที่โรงเรียน</li>
+                        <li>ระบบเป็นเครื่องมือช่วยค้นหา ไม่ใช่ระบบลงทะเบียนหรือจัดการข้อมูลนักเรียน</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Features -->
+            <div class="col-12">
+                <div class="about-card fade-up">
+                    <h4 class="fw-bold mb-4 text-center">ความสามารถของระบบ</h4>
+
+                    <div class="row text-center g-4">
+                        <div class="col-md-3">
+                            <div class="icon-circle mx-auto">🔍</div>
+                            <h6 class="fw-bold">ค้นหาอาคาร</h6>
+                            <p class="text-muted small">
+                                ค้นหาชื่ออาคาร ห้องเรียน หรือสถานที่สำคัญ
+                            </p>
+                        </div>
+
+                        <div class="col-md-3">
+                            <div class="icon-circle mx-auto">🗺️</div>
+                            <h6 class="fw-bold">แผนที่โรงเรียน</h6>
+                            <p class="text-muted small">
+                                ดูตำแหน่งอาคารทั้งหมดภายในโรงเรียน
+                            </p>
+                        </div>
+
+                        <div class="col-md-3">
+                            <div class="icon-circle mx-auto">📍</div>
+                            <h6 class="fw-bold">นำทาง</h6>
+                            <p class="text-muted small">
+                                เชื่อมต่อ Google Maps เพื่อนำทางแบบเรียลไทม์
+                            </p>
+                        </div>
+
+                        <div class="col-md-3">
+                            <div class="icon-circle mx-auto">📱</div>
+                            <h6 class="fw-bold">Responsive</h6>
+                            <p class="text-muted small">
+                                รองรับมือถือ แท็บเล็ต และเดสก์ท็อป
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div style="height: 100px;"></div>
+
+            <!-- Developer -->
+            <div class="col-12">
+                <div class="about-card text-center">
+                    <h5 class="fw-bold mb-2">ผู้พัฒนา</h5>
+                    <p class="text-muted mb-1">
+                        ระบบนี้เป็นส่วนหนึ่งของโครงงานเพื่อฝึกทักษะ
+                        ด้านการออกแบบและพัฒนาเว็บไซต์
+                    </p>
+                    <p class="fw-semibold mb-0">
+                        Developed by Kasemsak
+                    </p>
+                </div>
+            </div>
+
+            <hr class="mb-2">
+            <footer class="text-center" style="margin-bottom: -12px;">
+                © 2025 ระบบค้นหาอาคารภายในโรงเรียนพิบูลมังสาหาร (ทดลองใช้) | Developed By Kasemsak
+            </footer>
+
+            <script>
+                // Introduction Hero
+                const observer = new IntersectionObserver(
+                    entries => {
+                        entries.forEach(entry => {
+                            if (entry.isIntersecting) {
+                                entry.target.classList.add("show");
+                            }
+                        });
+                    },
+                    {
+                        threshold: 0.15
+                    }
+                );
+
+                document.querySelectorAll(".hero-about").forEach(card => {
+                    observer.observe(card);
+                });
+
+                // Introduction System
+                const Systemandpurpose_observer = new IntersectionObserver(
+                    (entries) => {
+                        entries.forEach(entry => {
+                            if (entry.isIntersecting) {
+                                entry.target.classList.add("show");
+                                observer.unobserve(entry.target);
+                            }
+                        });
+                    },
+                    { threshold: 0.25 }
+                );
+
+                document.querySelectorAll(".about-card").forEach(card => {
+                    observer.observe(card);
+                });
+
+                // Background and Importance
+                const BGandImportance_observer = new IntersectionObserver(
+                    (entries) => {
+                        entries.forEach(entry => {
+                            if (entry.isIntersecting) {
+                                entry.target.classList.add("show");
+                                observer.unobserve(entry.target);
+                            }
+                        });
+                    },
+                    { threshold: 0.25 }
+                );
+
+                document.querySelectorAll(".fade-left, .fade-right, .fade-up").forEach(el => {
+                    observer.observe(el);
+                });
+
+                const Systemscope_observer = new IntersectionObserver(
+                    entries => {
+                        entries.forEach(entry => {
+                            if (entry.isIntersecting) {
+                                entry.target.classList.add("show");
+
+                                // ถ้ามี ul ข้างใน ให้มันโชว์ด้วย
+                                const list = entry.target.querySelector(".stagger-list");
+                                if (list) list.classList.add("show");
+
+                                observer.unobserve(entry.target);
+                            }
+                        });
+                    },
+                    { threshold: 0.25 }
+                );
+
+                document.querySelectorAll(".fade-up").forEach(el => observer.observe(el));
+
+                const Feature_observer = new IntersectionObserver(
+                    entries => {
+                        entries.forEach(entry => {
+                            if (entry.isIntersecting) {
+                                entry.target.classList.add("show");
+
+                                const featureList = entry.target.querySelector(".feature-list");
+                                if (featureList) featureList.classList.add("show");
+
+                                observer.unobserve(entry.target);
+                            }
+                        });
+                    },
+                    { threshold: 0.3 }
+                );
+
+                document.querySelectorAll(".fade-up").forEach(el => observer.observe(el));
+
+
+                // -----------Header------------ //
+                const header = document.getElementById("mainHeader");
+                const triggerPoint = 320;
+
+                header.classList.add("header-hide");
+
+                let lastScroll = 0;
+
+                window.addEventListener("scroll", () => {
+                    const currentScroll = window.scrollY;
+
+                    if (currentScroll <= triggerPoint) {
+                        // เลื่อนชิดบนสุด → ซ่อน header
+                        header.classList.add("header-hide");
+                        header.classList.remove("header-show");
+                    }
+                    else if (currentScroll > lastScroll) {
+                        // เลื่อนลง → แสดง header
+                        header.classList.remove("header-hide");
+                        header.classList.add("header-show");
+                    }
+
+                    lastScroll = currentScroll;
+                });
+
+                // ปุ่มสามขีด hamburger //
+                function toggleSidebar() {
+                    document.getElementById("sidebar").classList.toggle("active");
+                    document.getElementById("overlay").classList.toggle("active");
+                    document.querySelector(".hamburger").classList.toggle("active");
+                }
+            </script>
+
+</body>
+
+</html>

@@ -27,7 +27,9 @@ header {
 }
 
 .building-card {
-  transition: transform 0.25s ease, box-shadow 0.25s ease;
+  transition:
+    transform 0.25s ease,
+    box-shadow 0.25s ease;
   cursor: pointer;
   border-radius: 12px;
   overflow: hidden;
@@ -84,7 +86,11 @@ header {
   transition: 0.4s;
   z-index: 1050;
   overflow-y: auto;
-  background-color: #3b486d;
+  background: rgba(25, 35, 70, 0.75);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-right: 1px solid rgba(255, 255, 255, 0.15);
+  box-shadow: 4px 0 20px rgba(0, 0, 0, 0.3);
 }
 
 .sidebar.active {
@@ -111,46 +117,15 @@ header {
 }
 
 a.d-block {
-  transition: background-color 0.3s, color 0.3s;
+  transition:
+    background-color 0.3s,
+    color 0.3s;
 }
 
 a.d-block:hover {
   background-color: rgba(255, 255, 255, 0.2);
   backdrop-filter: blur(6px);
   color: black;
-}
-
-.back-btn {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  border: none;
-  background: #f8f9fa;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
-  font-size: 20px;
-  cursor: pointer;
-  transition: all 0.25s ease;
-}
-
-.back-btn:hover {
-  background: #0d6efd;
-  color: white;
-  transform: scale(1.1);
-}
-
-.back-btn:active {
-  transform: scale(0.95);
-}
-
-.zoom-img {
-  max-width: 100%;
-  transition: transform 0.25s ease;
-  cursor: zoom-in;
-}
-
-.zoom-img.zoomed {
-  transform: scale(2);
-  cursor: zoom-out;
 }
 
 .zoom-icon {
@@ -163,4 +138,45 @@ a.d-block:hover {
   border-radius: 50%;
   font-size: 18px;
   pointer-events: none; /* คลิกทะลุ */
+}
+
+.nav-link {
+  color: #333;
+  position: relative;
+  padding-bottom: 6px;
+  transition: color 0.25s ease;
+}
+
+.nav-link::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  bottom: 0;
+  width: 0;
+  height: 2px;
+  background-color: #1e3a8a;
+  transition: all 0.25s ease;
+  transform: translateX(-50%);
+}
+
+.nav-link:hover {
+  color: #1e3a8a;
+}
+
+.nav-link:hover::after {
+  width: 100%;
+}
+
+/* Animation All Build Card*/
+.animate-card {
+  opacity: 0;
+  transform: translateY(30px);
+  transition:
+    opacity 0.6s ease,
+    transform 0.6s ease;
+}
+
+.animate-card.show {
+  opacity: 1;
+  transform: translateY(0);
 }
