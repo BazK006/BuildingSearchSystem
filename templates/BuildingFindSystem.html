@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="th">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ระบบค้นหาอาคาร | โรงเรียนพิบูลมังสาหาร</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="../static/css/findbuildcss.css">
+    <link rel="icon" type="image/png" href="static/images/pmlogo.png">
+</head>
+
+<body>
+    <header id="mainHeader" class="shadow-sm bg-white">
+        <div class="container py-3 d-flex flex-column flex-md-row 
+                justify-content-between align-items-center text-center text-md-start">
+            <div class="d-flex align-items-center gap-2">
+                <a href="../index.html" style="text-decoration: none; color: black;">
+                    <img src="../static/images/pmlogo.png" width="38" height="36" class="img-fluid">
+                </a>
+                <a href="../index.html" style="text-decoration: none; color: black;">
+                    <h4 class="m-1 fst-italic">ระบบค้นหาอาคาร</h4>
+                </a>
+            </div>
+
+            <!-- Desktop Menu -->
+            <nav class="d-none d-lg-flex gap-5 ps-lg-5">
+                <a href="../index.html" class="nav-link fw-semibold">หน้าหลัก</a>
+                <a href="about.html" class="nav-link fw-semibold">เกี่ยวกับ</a>
+                <a href="BuildingFindSystem.html" class="nav-link fw-semibold">ค้นหาอาคาร</a>
+                <a href="schoolmap.html" class="nav-link fw-semibold">แผนที่</a>
+                <a href="buildall.html" class="nav-link fw-semibold">อาคารทั้งหมด</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- ปุ่ม Hamburger -->
+    <button class="hamburger d-lg-none" onclick="toggleSidebar()">
+        <div></div>
+        <div></div>
+        <div></div>
+    </button>
+
+    <!-- Sidebar -->
+    <div class="sidebar pt-5" id="sidebar">
+        <a class='d-block p-3 text-white text-decoration-none' href="../index.html">หน้าหลัก</a>
+        <a class='d-block p-3 text-white text-decoration-none' href="about.html">เกี่ยวกับ</a>
+        <a class='d-block p-3 text-white text-decoration-none' href="BuildingFindSystem.html">ระบบค้นหาอาคาร</a>
+        <a class='d-block p-3 text-white text-decoration-none' href="schoolmap.html">แผนที่ภายในโรงเรียน</a>
+        <a class='d-block p-3 text-white text-decoration-none' href="buildall.html">อาคารทั้งหมด</a>
+    </div>
+
+    <!-- Overlay มืดด้านหลัง -->
+    <div class="overlay" id="overlay" onclick="toggleSidebar()"></div>
+
+    <div class="container py-5" id="buildingSection">
+
+        <!-- Title + Search -->
+        <div class="d-flex flex-column flex-md-row align-items-md-center justify-content-between mb-4 gap-3">
+            <h2 class="fw-bold mb-0 text-center text-md-start fade-in">
+                ระบบค้นหาอาคารภายในโรงเรียน
+            </h2>
+
+            <input type="text" id="searchInput" style="width: 65%;"
+                class="form-control form-control-lg shadow-sm w-md-50 mx-auto "
+                placeholder="พิมพ์ชื่ออาคาร เช่น อาคาร 10... ">
+        </div>
+
+        <hr>
+
+        <!-- Cards -->
+        <div class="row g-4 justify-content-center card-group-animate" id="buildingContainer"></div>
+        <div id="noResult" class="text-center text-muted mt-5" style="display: none;">
+            🔍 ไม่พบอาคารที่ค้นหา
+        </div>
+
+    </div>
+
+    <!-- Modal for Card Search -->
+    <div class="modal fade" id="detailModal" tabindex="-1">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content rounded-4">
+
+                <div class="modal-header">
+                    <h5 class="modal-title fw-bold" id="modalTitle"></h5>
+                    <button class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+
+                <div class="modal-body">
+                    <img id="modalImg" class="img-fluid rounded mb-3 d-block mx-auto">
+                    <p id="modalDesc" class="text-muted"></p>
+                </div>
+
+                <div class="modal-footer">
+                    <a id="modalMap" target="_blank" class="btn btn-primary btnlocation2">
+                        ดูพิกัดบน Google Maps
+                    </a>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <div class="box1" style="height: 200px;"></div>
+
+    <!-- วิธีใช้ -->
+    <div class="container my-5">
+
+        <div class="card shadow-sm p-4"
+            style="border-radius: 18px; background: #fff; font-size: 14px; line-height: 1.7;">
+
+            <h5 class="fw-bold mb-3">
+                <i class="bi bi-lightbulb me-2 text-primary"></i>
+                วิธีใช้งานระบบค้นหาอาคาร
+            </h5>
+
+            <div class="row g-3">
+
+                <!-- Step 1 -->
+                <div class="col-12 col-md-6">
+                    <div class="d-flex align-items-start">
+                        <span class="badge bg-primary rounded-pill me-3 mt-1">1</span>
+                        <div>
+                            <div class="fw-bold">พิมพ์ชื่ออาคาร</div>
+                            <div class="text-muted">
+                                พิมพ์ชื่ออาคารที่ต้องการค้นหาในช่องค้นหาด้านบน
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 2 -->
+                <div class="col-12 col-md-6">
+                    <div class="d-flex align-items-start">
+                        <span class="badge bg-primary rounded-pill me-3 mt-1">2</span>
+                        <div>
+                            <div class="fw-bold">เลือกอาคารจากรายการ</div>
+                            <div class="text-muted">
+                                คลิกการ์ดอาคารเพื่อดูรูปภาพและรายละเอียดเบื้องต้นของอาคาร
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 3 -->
+                <div class="col-12 col-md-6">
+                    <div class="d-flex align-items-start">
+                        <span class="badge bg-primary rounded-pill me-3 mt-1">3</span>
+                        <div>
+                            <div class="fw-bold">กดปุ่มดูพิกัดบน Google Maps</div>
+                            <div class="text-muted" style="max-width: 410px;">
+                                ระบบจะเปิดตำแหน่งอาคารใน Google Maps เพื่อแสดงพิกัดบนแผนที่
+                                กรุณาสังเกตจุดปักหมุดสีแดง ซึ่งเป็นตำแหน่งของอาคารที่เลือก
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 4 -->
+                <div class="col-12 col-md-6">
+                    <div class="d-flex align-items-start">
+                        <span class="badge bg-primary rounded-pill me-3 mt-1">4</span>
+                        <div>
+                            <div class="fw-bold">กดปุ่มเส้นทางใน Google Maps</div>
+                            <div class="text-muted">
+                                เพื่อดูเส้นทาง ระยะทาง และเริ่มการนำทางไปยังอาคารที่เลือก
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <hr class="mb-5">
+    <footer class="text-center p-3 bg-light" style="position: relative; top: -20px;">
+        © 2025 ระบบค้นหาอาคารภายในโรงเรียนพิบูลมังสาหาร (ทดลองใช้) | Developed By Kasemsak
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+
+    <script src="../static/js/BuildSearch.js">
+    </script>
+
+</body>
+
+</html>
