@@ -7,7 +7,7 @@ from sqlalchemy import (
     ForeignKey,
 )
 from sqlalchemy.orm import relationship
-from models.user import Base
+from database import Base
 from datetime import datetime
 from models.category import Category
 

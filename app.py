@@ -13,12 +13,13 @@ from routes import (
 from routes.building_manager import bp as build_manager_bp
 from routes.auth import limiter
 from routes.stats import admin_stats_bp
-from models.user import Base
+# from models.user import Base
 from models.teachers import Teacher
 from models.staffs import Staff
 from models.admin import Admin
 from models.building import Building
 from models.category import Category
+import os
 
 app = Flask(__name__)
 app.secret_key = settings.secret_key
@@ -44,4 +45,5 @@ app.register_blueprint(build_search.bp, url_prefix="/search")
 app.register_blueprint(build_all.bp, url_prefix="/all")
 
 if __name__ == "__main__":
-    app.run(debug=True, port=settings.flask_port, host="0.0.0.0")
+    port = int(os.environ.get("PORT", settings.flask_port))
+    app.run(debug=False, port=port, host="0.0.0.0")
