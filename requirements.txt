@@ -1,0 +1,7 @@
+Flask==3.0.3
+Flask-Limiter==3.7.0
+psycopg2-binary==2.9.9
+pydantic==2.6.4
+pydantic-settings==2.2.1
+python-dotenv==1.0.1
+SQLAlchemy==2.0.29
