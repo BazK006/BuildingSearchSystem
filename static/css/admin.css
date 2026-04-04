@@ -1,0 +1,346 @@
+body {
+    background: #f7f8fa;
+    font-family: "Prompt", sans-serif;
+}
+
+/* Header */
+header {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 999;
+    transition: transform 0.5s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+.header-hide {
+    transform: translateY(-100%);
+}
+
+.header-show {
+    transform: translateY(0);
+}
+
+#mainHeader {
+    background: linear-gradient(135deg, #ffeb3b, #ff9800);
+    color: #2e2d2d;
+    border-radius: 0 0 12px 12px;
+}
+
+/* กล่องค้นหา */
+.search-box {
+    max-width: 600px;
+    margin: 0 auto 30px auto;
+}
+
+/* การ์ดอาคาร */
+.card {
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    border: none;
+    backface-visibility: hidden;
+}
+
+/* เอฟเฟกต์ตอนเมาส์ชี้ (Hover) */
+.card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15) !important;
+}
+
+.btn-sm.transition-all:hover {
+    transform: scale(1.03);
+    filter: brightness(0.9);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.row.g-4 {
+    padding-top: 10px;
+}
+
+.search-box {
+    max-width: 450px;
+    margin: 0 auto 25px auto;
+}
+
+#searchInput {
+    border: #aaaaaa 1px solid;
+}
+
+/* --------Hamburger Button------------- */
+.hamburger {
+    position: fixed;
+    top: 15px;
+    left: 15px;
+    z-index: 1051;
+    background: none;
+    border: none;
+    cursor: pointer;
+    outline: none;
+}
+
+.hamburger div {
+    width: 30px;
+    height: 3px;
+    margin: 6px 0;
+    background-color: #e67e22;
+    transition: 0.4s;
+}
+
+.hamburger.active div:nth-child(1) {
+    transform: rotate(45deg) translate(5px, 7px);
+}
+
+.hamburger.active div:nth-child(2) {
+    opacity: 0;
+}
+
+.hamburger.active div:nth-child(3) {
+    transform: rotate(-45deg) translate(5px, -7.5px);
+}
+
+.sidebar {
+    position: fixed;
+    top: 0;
+    left: -260px;
+    width: 260px;
+    height: 100%;
+    transition: 0.4s;
+    z-index: 1050;
+    overflow-y: auto;
+    background: rgba(25, 35, 70, 0.75);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-right: 1px solid rgba(255, 255, 255, 0.15);
+    box-shadow: 4px 0 20px rgba(0, 0, 0, 0.3);
+}
+
+.sidebar.active {
+    left: 0;
+}
+
+.content {
+    padding: 20px;
+}
+
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.4);
+    z-index: 1049;
+    display: none;
+}
+
+.overlay.active {
+    display: block;
+}
+
+a.d-block {
+    transition:
+        background-color 0.3s,
+        color 0.3s;
+}
+
+a.d-block:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(6px);
+    color: black;
+}
+
+#modalImg {
+    width: 100%;
+    max-width: 550px;
+    object-fit: contain;
+    text-align: center;
+}
+
+/* Menu ต่างๆ*/
+.nav-link {
+    color: #333;
+    position: relative;
+    padding-bottom: 6px;
+    transition: color 0.25s ease;
+}
+
+.nav-link::after {
+    content: "";
+    position: absolute;
+    left: 50%;
+    bottom: 0;
+    width: 0;
+    height: 2px;
+    background-color: #1e3a8a;
+    transition: all 0.25s ease;
+    transform: translateX(-50%);
+}
+
+.nav-link:hover {
+    color: #1e3a8a;
+}
+
+.nav-link:hover::after {
+    width: 100%;
+}
+
+/* ----Animation card Build---- */
+.fade-in {
+    opacity: 0;
+    animation: fadeIn 0.7s ease forwards;
+}
+
+.fade-delay {
+    opacity: 0;
+    animation: fadeIn 0.7s ease forwards;
+    animation-delay: 0.25s;
+}
+
+@keyframes fadeIn {
+    to {
+        opacity: 1;
+    }
+}
+
+/* กลุ่มการ์ด */
+.card-group-animate {
+    opacity: 0;
+    transform: translateY(12px);
+    transition: all 0.6s ease;
+}
+
+.card-group-animate.show {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.table-responsive {
+    max-height: 600px;
+    overflow-y: auto;
+}
+
+thead th {
+    position: sticky;
+    top: 0;
+    background-color: #f8f9fa !important;
+    z-index: 1;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+.thumbnail-img {
+    width: 60px;
+    height: 60px;
+    object-fit: cover;
+    border-radius: 8px;
+}
+
+/* ปุ่มหน้าหลัก */
+.btn-home-custom {
+    background-color: #eff6ff;
+    color: #1d4ed8;
+    border: 1px solid #dbeafe;
+    font-weight: 500;
+    border-radius: 50px;
+    padding: 0.4rem 1rem;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.btn-home-custom:hover {
+    background-color: #1d4ed8;
+    color: #ffffff;
+    transform: translateX(-3px);
+    box-shadow: 0 4px 12px rgba(29, 78, 216, 0.2);
+}
+
+.btn-home-custom i {
+    margin-right: 5px;
+    font-size: 1.1rem;
+}
+
+/* ปุ่มเพิ่มนักเรียน */
+.btn-add-student {
+    background-color: #f0fdf4;
+    color: #166534;
+    border: 1px solid #bbf7d0;
+    font-weight: 500;
+    border-radius: 50px;
+    padding: 0.4rem 1.2rem;
+    transition: all 0.3s ease;
+}
+
+.btn-add-student:hover {
+    background-color: #16a34a;
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(22, 163, 74, 0.2);
+}
+
+/* ปุ่มเพิ่มครู */
+.btn-add-teacher {
+    background-color: #eff6ff;
+    color: #1e40af;
+    border: 1px solid #bfdbfe;
+    font-weight: 500;
+    border-radius: 50px;
+    padding: 0.4rem 1.2rem;
+    transition: all 0.3s ease;
+}
+
+.btn-add-teacher:hover {
+    background-color: #2563eb;
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2);
+}
+
+/* ปุ่มเพิ่มเจ้าหน้าที่ */
+.btn-add-staff {
+    background-color: #fef2f2;
+    color: #991b1b;
+    border: 1px solid #fecaca;
+    font-weight: 500;
+    border-radius: 50px;
+    padding: 0.4rem 1.2rem;
+    transition: all 0.3s ease;
+}
+
+.btn-add-staff:hover {
+    background-color: #ef4444;
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(239, 68, 68, 0.2);
+}
+
+/* ปุ่มแก้ไข */
+.btn-edit-custom {
+    background-color: #fffbeb;
+    color: #b45309;
+    border: 1px solid #fde68a;
+    font-weight: 500;
+    border-radius: 8px;
+    padding: 0.25rem 0.6rem;
+    transition: all 0.2s ease-in-out;
+}
+
+.btn-edit-custom:hover {
+    background-color: #f59e0b;
+    color: white;
+    transform: scale(1.1);
+    box-shadow: 0 2px 8px rgba(245, 158, 11, 0.2);
+}
+
+/* ปุ่มลบ */
+.btn-delete-custom {
+    background-color: #fef2f2;
+    color: #dc2626;
+    border: 1px solid #fecaca;
+    font-weight: 500;
+    border-radius: 8px;
+    padding: 0.25rem 0.6rem;
+    transition: all 0.2s ease-in-out;
+}
+
+.btn-delete-custom:hover {
+    background-color: #dc2626;
+    color: white;
+    transform: scale(1.1);
+    box-shadow: 0 2px 8px rgba(220, 38, 38, 0.2);
+}

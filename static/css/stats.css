@@ -1,0 +1,258 @@
+  body {
+      font-family: 'Prompt', sans-serif;
+      background-color: #f8f9fa;
+      color: #333;
+  }
+
+  .stats-card {
+      border-radius: 20px;
+      border: none;
+      transition: transform 0.3s ease;
+  }
+
+  .stats-card:hover {
+      transform: translateY(-5px);
+  }
+
+  .table-container {
+      border-radius: 20px;
+      overflow: hidden;
+      background: white;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+  }
+
+  .gradient-bg {
+      background: linear-gradient(135deg, #4f46e5, #0ea5e9) !important;
+      color: white;
+  }
+
+  .progress {
+      height: 8px;
+      border-radius: 10px;
+      background-color: #e9ecef;
+  }
+
+  .animate-up {
+      animation: fadeInUp 0.6s ease forwards;
+      opacity: 0;
+  }
+
+  @keyframes fadeInUp {
+      from {
+          opacity: 0;
+          transform: translateY(20px);
+      }
+
+      to {
+          opacity: 1;
+          transform: translateY(0);
+      }
+  }
+
+  /* Header ยาววว*/
+  header {
+      position: fixed;
+      top: 0;
+      width: 100%;
+      z-index: 999;
+      transition: transform 0.5s cubic-bezier(0.25, 0.8, 0.25, 1);
+  }
+
+  .header-hide {
+      transform: translateY(-100%);
+  }
+
+  .header-show {
+      transform: translateY(0);
+  }
+
+  #mainHeader {
+      background: linear-gradient(135deg, #ffeb3b, #ff9800);
+      color: #2e2d2d;
+      border-radius: 0 0 12px 12px;
+  }
+
+  .hero {
+      padding: 80px 20px;
+      background: linear-gradient(135deg, #ffeb3b, #ff9800);
+      text-align: center;
+      border-radius: 0 0 15px 15px;
+      box-shadow: 0 3px 5px rgba(0, 0, 0, 0.2);
+  }
+
+  .hero h1 {
+      font-size: 2.5rem;
+      font-weight: 700;
+      opacity: 0;
+      transform: translateY(20px);
+      animation: fadeUp 0.8s ease forwards;
+      animation-delay: 0.2s;
+  }
+
+  .hero p {
+      font-size: 1.2rem;
+      margin-top: 10px;
+      opacity: 0;
+      transform: translateY(20px);
+      animation: fadeUp 0.8s ease forwards;
+      animation-delay: 0.4s;
+  }
+
+  .hero .row,
+  .hero button {
+      opacity: 0;
+      transform: translateY(20px);
+      animation: fadeUp 0.8s ease forwards;
+      animation-delay: 0.6s;
+  }
+
+  /* Keyframes */
+  @keyframes heroFadeUp {
+      to {
+          opacity: 1;
+          transform: translateY(0);
+      }
+  }
+
+  @keyframes fadeUp {
+      to {
+          opacity: 1;
+          transform: translateY(0);
+      }
+  }
+
+  .section-title {
+      font-weight: 700;
+      margin: 40px 0px 20px;
+      background: linear-gradient(135deg, #E65100, #F9A825);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      filter: drop-shadow(2px 2px 4px rgba(0, 0, 0, 0.1));
+  }
+
+  /*-----------ปุ่ม Hamburger------------- */
+  .hamburger {
+      position: fixed;
+      top: 15px;
+      left: 15px;
+      z-index: 1051;
+      background: none;
+      border: none;
+      cursor: pointer;
+      outline: none;
+  }
+
+  .hamburger div {
+      width: 30px;
+      height: 3px;
+      margin: 6px 0;
+      background-color: #e67e22;
+      transition: 0.4s;
+  }
+
+  /* แปลงเป็นกากบาทตอนเปิด */
+  .hamburger.active div:nth-child(1) {
+      transform: rotate(45deg) translate(5px, 7px);
+  }
+
+  .hamburger.active div:nth-child(2) {
+      opacity: 0;
+  }
+
+  .hamburger.active div:nth-child(3) {
+      transform: rotate(-45deg) translate(5px, -7.5px);
+  }
+
+  /* Sidebar */
+  .sidebar {
+      position: fixed;
+      top: 0;
+      left: -260px;
+      width: 260px;
+      height: 100%;
+      transition: 0.4s;
+      z-index: 1050;
+      overflow-y: auto;
+      background: rgba(25, 35, 70, 0.75);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-right: 1px solid rgba(255, 255, 255, 0.15);
+      box-shadow: 4px 0 20px rgba(0, 0, 0, 0.3);
+  }
+
+  /* เมื่อเปิด */
+  .sidebar.active {
+      left: 0;
+  }
+
+  /* เนื้อหาหลัก */
+  .content {
+      padding: 20px;
+  }
+
+  /* Background มืดตอน Sidebar เปิด */
+  .overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.4);
+      z-index: 1049;
+      display: none;
+  }
+
+  .overlay.active {
+      display: block;
+  }
+
+  a.d-block {
+      transition:
+          background-color 0.3s,
+          color 0.3s;
+  }
+
+  a.d-block:hover {
+      background-color: rgba(255, 255, 255, 0.2);
+      backdrop-filter: blur(6px);
+      color: black;
+  }
+
+  /* ปุ่มส่งออก Excel */
+  .btn-mint {
+      background-color: #d1fae5;
+      color: #065f46;
+      border: none;
+      transition: all 0.3s ease;
+  }
+
+  .btn-mint:hover {
+      background-color: #a7f3d0;
+      color: #064e3b;
+      transform: translateY(-2px);
+  }
+
+  /* Filter Time ดูช่วงเวลาสถิติต่างๆ */
+  #timeFilter {
+      border-radius: 50px;
+      padding-left: 1rem;
+      padding-right: 2rem;
+      border: 1.5px solid #e0e7ff;
+      background-color: #f8faff;
+      color: #0d6efd;
+      font-weight: 500;
+      transition: all 0.3s ease;
+      cursor: pointer;
+      box-shadow: 0 2px 4px rgba(13, 110, 253, 0.05) !important;
+  }
+
+  #timeFilter:focus {
+      border-color: #0d6efd;
+      box-shadow: 0 0 0 0.25 red rgba(13, 110, 253, 0.15) !important;
+      background-color: #ffffff;
+  }
+
+  #timeFilter option {
+      color: #333;
+      background-color: #fff;
+  }

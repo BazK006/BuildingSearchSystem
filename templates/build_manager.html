@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html lang="th">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>จัดการข้อมูลอาคารสถานที่ | ระบบค้นหาอาคาร</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/build_manager.css') }}">
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='images/pmlogo.png') }}">
+
+</head>
+
+<body class="bg-light">
+    <header id="mainHeader" class="shadow-sm bg-white">
+        <div
+            class="container py-3 d-flex flex-column flex-md-row justify-content-between align-items-center text-center text-md-start">
+            <div class="d-flex align-items-center gap-2">
+                <a href="{{ url_for('home.index') }}" style="text-decoration: none; color: black;">
+                    <img src="{{ url_for('static', filename='images/pmlogo.png') }}" width="38" height="36"
+                        class="img-fluid">
+                </a>
+                <a href="{{ url_for('home.index') }}" style="text-decoration: none; color: black;">
+                    <h4 class="m-1 fst-italic">จัดการข้อมูลอาคารสถานที่</h4>
+                </a>
+            </div>
+
+            <nav class="d-none d-lg-flex align-items-center gap-5 ps-lg-5">
+                <a href="{{ url_for('home.index') }}" class="nav-link fw-semibold">หน้าหลัก</a>
+                <a href="{{ url_for('about.about') }}" class="nav-link fw-semibold">เกี่ยวกับ</a>
+                <a href="{{ url_for('build_search.search') }}" class="nav-link fw-semibold">ค้นหาอาคาร</a>
+                <a href="{{ url_for('map.school_map') }}" class="nav-link fw-semibold">แผนที่</a>
+                <a href="{{ url_for('build_all.all_buildings') }}" class="nav-link fw-semibold">อาคารทั้งหมด</a>
+
+                <a href="#" class="nav-link fw-bold text-success" data-bs-toggle="modal"
+                    data-bs-target="#addBuildingModal">
+                    <i class="bi bi-plus-circle-fill me-1"></i> เพิ่มอาคาร
+                </a>
+
+                <div class="nav-item dropdown ms-lg-3">
+                    <a class="text-decoration-none d-flex align-items-center" href="#" id="userDropdown" role="button"
+                        data-bs-toggle="dropdown" aria-expanded="false" style="outline: none;">
+                        <i class="bi bi-person-circle fs-3 text-secondary"></i>
+                    </a>
+
+                    <ul class="dropdown-menu dropdown-menu-end shadow border-0" aria-labelledby="userDropdown"
+                        style="border-radius: 12px; min-width: 240px;">
+                        <li>
+                            <div class="px-4 py-3 text-start">
+                                <div class="fw-bold text-primary" style="font-size: 15px;">{{ session.get('full_name')
+                                    }}</div>
+                                {% if session.get('role') == 'student' %}
+                                <div class="text-muted small mt-1">รหัสนักเรียน: {{ session.get('identifier') }}</div>
+                                <span class="badge bg-success mt-2">STUDENT</span>
+                                {% elif session.get('role') == 'teacher' %}
+                                <div class="text-muted small mt-1">รหัสประจำตัว: {{ session.get('identifier') }}</div>
+                                <span class="badge mt-2" style="background-color: #6f42c1;">TEACHER</span>
+                                {% elif session.get('role') == 'staff' %}
+                                <div class="text-muted small mt-1">รหัสประจำตัว: {{ session.get('identifier') }}</div>
+                                <span class="badge bg-danger mt-2">STAFF</span>
+                                {% elif session.get('role') == 'admin' %}
+                                <div class="text-muted small mt-1">ID แอดมิน: {{ session.get('identifier') }}</div>
+                                <span class="badge bg-dark mt-2">ADMINISTRATOR</span>
+                                {% endif %}
+                            </div>
+                        </li>
+                        <li>
+                            <hr class="dropdown-divider">
+                        </li>
+
+                        {% if session.get('role') == 'staff' %}
+                        <li>
+                            <a class="dropdown-item py-2 px-4 fw-medium"
+                                href="{{ url_for('build_manager.dashboard') }}">
+                                <i class="bi bi-building-gear me-2 text-primary"></i> จัดการข้อมูลอาคาร
+                            </a>
+                        </li>
+                        {% endif %}
+
+                        {% if session.get('role') == 'admin' %}
+                        <li>
+                            <a class="dropdown-item py-2 px-4 fw-medium"
+                                href="{{ url_for('admin_manager.dashboard') }}">
+                                <i class="bi bi-people-fill me-2 text-primary"></i> จัดการข้อมูลผู้ใช้
+                            </a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item py-2 px-4 fw-medium"
+                                href="{{ url_for('build_manager.dashboard') }}">
+                                <i class="bi bi-building-gear me-2 text-primary"></i> จัดการข้อมูลอาคาร
+                            </a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item py-2 px-4 fw-medium"
+                                href="{{ url_for('admin_stats.show_statistics') }}">
+                                <i class="bi bi-graph-up-arrow me-2 text-primary"></i> สถิติการเข้าชม
+                            </a>
+                        </li>
+                        {% endif %}
+
+                        <li>
+                            <a class="dropdown-item text-danger fw-semibold py-2 px-4 mt-1"
+                                href="{{ url_for('auth.logout') }}">
+                                <i class="bi bi-box-arrow-right me-2"></i>ออกจากระบบ
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <div class="container my-5">
+        <div
+            class="d-flex flex-column flex-lg-row justify-content-between align-items-lg-center mb-4 bg-white p-3 rounded shadow-sm border-start border-primary border-5 gap-3">
+
+            <h3 class="mb-0 fw-bold">
+                <i class="bi bi-building-gear text-primary me-2"></i> จัดการข้อมูลอาคารสถานที่
+            </h3>
+
+            <div class="d-flex align-items-center gap-2 flex-wrap flex-lg-nowrap">
+
+                <div class="search-box mb-0" style="max-width: 300px; min-width: 250px;">
+                    <div class="input-group shadow-sm" style="border-radius: 12px; overflow: hidden;">
+                        <input type="text" id="searchInput" class="form-control border-end-0 py-2 ps-3"
+                            placeholder="ค้นหาอาคาร..."
+                            style="border: 1px solid #dee2e6; border-radius: 12px 0 0 12px; outline: none; box-shadow: none; font-size: 14px;">
+
+                        <button class="btn btn-primary px-3" type="button" id="btnSearch"
+                            style="background-color: #4338ca; border: 1px solid #4338ca; border-radius: 0 12px 12px 0;">
+                            <i class="bi bi-search"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="d-flex justify-content-center w-100 my-3">
+                    <button
+                        class="btn btn-success btn-sm fw-bold px-4 py-2 shadow-sm btn-action-add transition-all rounded-pill"
+                        data-bs-toggle="modal" data-bs-target="#addBuildingModal">
+                        <i class="bi bi-plus-circle-fill me-2"></i> เพิ่มอาคารใหม่
+                    </button>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- Show Data Building All -->
+        <div class="row g-4">
+            {% for b in buildings %}
+            <div class="col-12 col-md-6 col-lg-4">
+                {% set card_img = url_for('static', filename='uploads/' + b.image_file) if b.image_file else
+                url_for('static', filename='images/default_building.jpg') %}
+                {% set fallback_img = url_for('static', filename='images/default_building.jpg') %}
+
+                <div class="card h-100 shadow-sm border-0" style="border-radius: 18px; overflow: hidden;">
+                    <img src="{{ card_img }}" class="card-img-top border-bottom"
+                        style="height: 200px; object-fit: cover;" alt="{{ b.name }}"
+                        onerror="this.onerror=null; this.src='{{ fallback_img }}'">
+
+                    <div class="card-body position-relative">
+                        <span class="badge bg-info text-dark position-absolute top-0 end-0 mt-3 me-3 rounded-pill">
+                            <i class="bi bi-eye"></i> {{ b.view_count }}
+                        </span>
+                        <h5 class="fw-bold text-primary mt-1">{{ b.name }}</h5>
+                        <p class="text-muted small text-truncate-2">{{ b.description }}</p>
+                        <div class="mb-2">
+                            <span
+                                class="badge rounded-pill bg-primary bg-opacity-10 text-primary border border-primary border-opacity-25"
+                                style="font-size: 11px;">
+                                <i class="bi bi-tag-fill me-1"></i> {{ b.category.name if b.category else
+                                'ไม่มีหมวดหมู่' }}
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="card-footer bg-white border-0 pt-0 pb-3 px-3">
+                        {% if b.maps_link %}
+                        <a href="{{ b.maps_link }}" target="_blank"
+                            class="btn btn-sm w-100 mb-2 py-2 fw-semibold shadow-sm transition-all"
+                            style="background-color: #eef2ff; color: #4338ca; border: none; border-radius: 10px;">
+                            <i class="bi bi-geo-alt-fill me-1"></i> ดูพิกัดบน Google Maps
+                        </a>
+                        {% endif %}
+
+                        <div class="d-flex gap-2">
+                            <button class="btn btn-sm flex-fill py-2 fw-bold transition-all" data-bs-toggle="modal"
+                                data-bs-target="#editBuildingModal{{ b.id }}"
+                                style="background-color: #fff9db; color: #f59f00; border: none; border-radius: 10px;">
+                                <i class="bi bi-pencil-square me-1"></i> แก้ไข
+                            </button>
+
+                            <form action="{{ url_for('build_manager.delete_building', id=b.id) }}" method="POST"
+                                class="d-inline flex-fill m-0 delete-form">
+                                <button type="button" class="btn btn-sm w-100 py-2 fw-bold btn-delete transition-all"
+                                    style="background-color: #fff5f5; color: #fa5252; border: none; border-radius: 10px;">
+                                    <i class="bi bi-trash3-fill me-1"></i> ลบ
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% else %}
+            <div class="col-12">
+                <div class="text-center text-muted py-5 bg-white rounded shadow-sm border">
+                    <i class="bi bi-building-x fs-1 text-secondary mb-3 d-block"></i>
+                    <h5 class="fw-bold">ยังไม่มีข้อมูลอาคารในระบบ</h5>
+                    <p>คลิกปุ่ม "เพิ่มอาคารใหม่" เพื่อเริ่มต้นเพิ่มข้อมูล</p>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    {% for b in buildings %}
+    <div class="modal fade" id="editBuildingModal{{ b.id }}" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content rounded-4 border-0 shadow-lg overflow-hidden">
+
+                {% set building_img = url_for('static', filename='uploads/' + b.image_file) if b.image_file else
+                url_for('static', filename='images/default_building.jpg') %}
+                {% set default_img = url_for('static', filename='images/default_building.jpg') %}
+
+                <div class="position-relative">
+                    <img src="{{ building_img }}" class="w-100" style="height: 220px; object-fit: cover;"
+                        alt="Header Preview" onerror="this.onerror=null; this.src='{{ default_img }}'">
+
+                    <button type="button" class="btn-close btn-close-white position-absolute top-0 end-0 m-3 shadow-sm"
+                        data-bs-dismiss="modal" aria-label="Close"
+                        style="filter: drop-shadow(0 0 2px rgba(0,0,0,0.5));"></button>
+
+                    <div class="position-absolute bottom-0 start-0 w-100 p-3"
+                        style="background: linear-gradient(transparent, rgba(0,0,0,0.7));">
+                        <h5 class="modal-title fw-bold text-white mb-0">
+                            <i class="bi bi-pencil-square me-2"></i>แก้ไขข้อมูล: {{ b.name }}
+                        </h5>
+                    </div>
+                </div>
+
+                <form action="{{ url_for('build_manager.edit_building', id=b.id) }}" method="POST"
+                    enctype="multipart/form-data">
+                    <div class="modal-body p-4">
+
+                        <div class="row g-3">
+                            <div class="col-12">
+                                <label class="form-label fw-bold">ชื่ออาคาร <span class="text-danger">*</span></label>
+                                <input type="text" name="name"
+                                    class="form-control form-control-lg border-primary-subtle" value="{{ b.name }}"
+                                    required>
+                            </div>
+
+                            <div class="col-12">
+                                <label class="form-label fw-bold">หมวดหมู่ <span class="text-danger">*</span></label>
+                                <div class="input-group shadow-sm">
+                                    <span class="input-group-text bg-white border-end-0">
+                                        <i class="bi bi-grid-fill text-primary"></i>
+                                    </span>
+                                    <select name="category_id" class="form-select border-start-0 border-primary-subtle"
+                                        required>
+                                        {% for cat in categories %}
+                                        <option value="{{ cat.id }}" {% if b.category_id==cat.id %}selected{% endif %}>
+                                            {{ cat.name }}
+                                        </option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="col-12">
+                                <label class="form-label fw-bold">รายละเอียด/กลุ่มสาระ</label>
+                                <textarea name="description" class="form-control border-light-subtle"
+                                    rows="3">{{ b.description }}</textarea>
+                            </div>
+
+                            <div class="col-12">
+                                <label class="form-label fw-bold">พิกัด Google Maps</label>
+                                <div class="input-group shadow-sm">
+                                    <span class="input-group-text bg-white border-end-0"><i
+                                            class="bi bi-geo-alt-fill text-danger"></i></span>
+                                    <input type="url" name="maps_link" class="form-control border-start-0"
+                                        value="{{ b.maps_link }}" placeholder="https://goo.gl/maps/...">
+                                </div>
+                            </div>
+
+                            <div class="col-12 mt-4">
+                                <div
+                                    class="p-3 bg-primary bg-opacity-10 rounded-3 border border-primary border-opacity-25">
+                                    <label class="form-label fw-bold text-primary mb-1">
+                                        <i class="bi bi-cloud-upload me-1"></i> เปลี่ยนรูปภาพอาคาร
+                                    </label>
+                                    <input type="file" name="image_file" class="form-control form-control-sm shadow-sm"
+                                        accept="image/*">
+                                    <small class="text-muted d-block mt-1" style="font-size: 10px;">
+                                        *เลือกไฟล์ใหม่เพื่อแทนที่รูปแบนเนอร์ด้านบน
+                                    </small>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="modal-footer border-0 px-4 pb-4 pt-0">
+                        <button type="button" class="btn btn-light fw-medium px-4"
+                            data-bs-dismiss="modal">ยกเลิก</button>
+                        <button type="submit" class="btn btn-warning fw-bold px-5 shadow-sm">
+                            บันทึกข้อมูล <i class="bi bi-check-circle ms-1"></i>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+
+    <!-- Modal Add Building -->
+    <div class="modal fade" id="addBuildingModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content rounded-4">
+                <div class="modal-header bg-success text-white border-0">
+                    <h5 class="modal-title fw-bold"><i class="bi bi-plus-circle"></i> เพิ่มอาคารใหม่</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <form action="{{ url_for('build_manager.add_building') }}" method="POST" enctype="multipart/form-data">
+                    <div class="modal-body">
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold">ชื่ออาคาร <span class="text-danger">*</span></label>
+                            <input type="text" name="name" class="form-control" required placeholder="เช่น อาคาร 1">
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold">หมวดหมู่สถานะอาคาร <span
+                                    class="text-danger">*</span></label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-light">
+                                    <i class="bi bi-grid-fill text-success"></i>
+                                </span>
+                                <select name="category_id" class="form-select" required>
+                                    <option value="" disabled selected>--- กรุณาเลือกหมวดหมู่ ---</option>
+                                    {% for cat in categories %}
+                                    <option value="{{ cat.id }}">{{ cat.name }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold">รายละเอียด</label>
+                            <textarea name="description" class="form-control" rows="3"
+                                placeholder="เช่น กลุ่มสาระการเรียนรู้วิทยาศาสตร์..."></textarea>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold">อัปโหลดรูปภาพอาคาร <span
+                                    class="text-muted fw-normal">(รองรับ .jpg, .png)</span></label>
+                            <input type="file" name="image_file" class="form-control" accept="image/*">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold">ลิงก์ Google Maps</label>
+                            <input type="url" name="maps_link" class="form-control" placeholder="http://google...">
+                        </div>
+                    </div>
+                    <div class="modal-footer border-0">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">ยกเลิก</button>
+                        <button type="submit" class="btn btn-success">บันทึกข้อมูล</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        // ระบบยืนยันก่อนลบอาคาร
+        document.querySelectorAll('.btn-delete').forEach(button => {
+            button.addEventListener('click', function () {
+                const form = this.closest('form');
+                Swal.fire({
+                    title: 'ยืนยันการลบอาคาร?',
+                    text: "หากลบแล้วจะไม่สามารถกู้คืนข้อมูลและยอดวิวได้!",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#d33',
+                    cancelButtonColor: '#6c757d',
+                    confirmButtonText: 'ใช่, ลบเลย!',
+                    cancelButtonText: 'ยกเลิก'
+                }).then((result) => {
+                    if (result.isConfirmed) form.submit();
+                })
+            });
+        });
+
+        // -----------Header Hide/Show----------- //
+        const header = document.getElementById("mainHeader");
+        const triggerPoint = 1;
+        header.classList.add("header-hide");
+        let lastScroll = 0;
+
+        window.addEventListener("scroll", () => {
+            const currentScroll = window.scrollY;
+            if (currentScroll <= triggerPoint) {
+                header.classList.add("header-hide");
+                header.classList.remove("header-show");
+            }
+            else if (currentScroll > lastScroll) {
+                header.classList.remove("header-hide");
+                header.classList.add("header-show");
+            }
+            lastScroll = currentScroll;
+        });
+
+        // ระบบค้นหาอาคารในหน้า Dashboard (Real-time)
+        document.addEventListener('DOMContentLoaded', function () {
+            const searchInput = document.getElementById('searchInput');
+            const btnSearch = document.getElementById('btnSearch');
+
+            // ฟังก์ชันหลักในการกรองการ์ด
+            function filterBuildings() {
+                const searchTerm = searchInput.value.toLowerCase().trim();
+                const cards = document.querySelectorAll('.col-12.col-md-6.col-lg-4');
+                let hasResult = false;
+
+                cards.forEach(card => {
+                    const title = card.querySelector('h5').textContent.toLowerCase();
+                    const desc = card.querySelector('p').textContent.toLowerCase();
+
+                    if (title.includes(searchTerm) || desc.includes(searchTerm)) {
+                        card.style.display = "";
+                        hasResult = true;
+                    } else {
+                        card.style.display = "none";
+                    }
+                });
+
+                const existingNoResult = document.getElementById('noSearchUpdate');
+                if (!hasResult) {
+                    if (!existingNoResult) {
+                        const noResultDiv = document.createElement('div');
+                        noResultDiv.id = 'noSearchUpdate';
+                        noResultDiv.className = 'col-12 text-center py-5 text-muted';
+                        noResultDiv.innerHTML = `<i class="bi bi-search fs-1 d-block mb-3"></i> ไม่พบอาคารที่ตรงกับ "${searchTerm}"`;
+                        document.querySelector('.row.g-4').appendChild(noResultDiv);
+                    }
+                } else {
+                    if (existingNoResult) existingNoResult.remove();
+                }
+            }
+
+            searchInput.addEventListener('input', filterBuildings);
+            btnSearch.addEventListener('click', filterBuildings);
+            searchInput.addEventListener('keypress', function (e) {
+                if (e.key === 'Enter') {
+                    filterBuildings();
+                }
+            });
+        });
+
+        // การ enter ป้องกันไม่ส่งข้อมูลว่าง
+        document.addEventListener('keydown', function (event) {
+            if (event.key === 'Enter' && event.target.tagName !== 'TEXTAREA') {
+                if (event.target.closest('form')) {
+                    event.preventDefault();
+                    return false;
+                }
+            }
+        });
+    </script>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+    <div id="flash-messages-container" style="display: none;">
+        {% for category, message in messages %}
+        <span class="flash-data" data-category="{{ category }}" data-message="{{ message }}"></span>
+        {% endfor %}
+    </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const flashItems = document.querySelectorAll('.flash-data');
+            flashItems.forEach(function (item) {
+                const category = item.getAttribute('data-category');
+                const message = item.getAttribute('data-message');
+                Swal.fire({
+                    icon: category === 'success' ? 'success' : 'error',
+                    title: message,
+                    showConfirmButton: false,
+                    timer: 2000,
+                    toast: true,
+                    position: 'top-end'
+                });
+            });
+        });
+    </script>
+    {% endif %}
+    {% endwith %}
+</body>
+
+</html>

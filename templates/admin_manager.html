@@ -1,0 +1,784 @@
+<!DOCTYPE html>
+<html lang="th">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard | ระบบค้นหาอาคารเรียน</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/admin.css') }}">
+
+    <style>
+    </style>
+</head>
+
+<body>
+    <header id="mainHeader" class="shadow-sm bg-white">
+        <div
+            class="container py-3 d-flex flex-column flex-md-row justify-content-between align-items-center text-center text-md-start">
+            <div class="d-flex align-items-center gap-2">
+                <a href="{{ url_for('home.index') }}" style="text-decoration: none; color: black;">
+                    <img src="{{ url_for('static', filename='images/pmlogo.png') }}" width="38" height="36"
+                        class="img-fluid">
+                </a>
+                <a href="{{ url_for('home.index') }}" style="text-decoration: none; color: black;">
+                    <h4 class="m-1 fst-italic">จัดการข้อมูลผู้ใช้</h4>
+                </a>
+            </div>
+
+            <nav class="d-none d-lg-flex align-items-center gap-5 ps-lg-5">
+                <a href="{{ url_for('home.index') }}" class="nav-link fw-semibold">หน้าหลัก</a>
+                <a href="{{ url_for('about.about') }}" class="nav-link fw-semibold">เกี่ยวกับ</a>
+                <a href="{{ url_for('build_search.search') }}" class="nav-link fw-semibold">ค้นหาอาคาร</a>
+                <a href="{{ url_for('map.school_map') }}" class="nav-link fw-semibold">แผนที่</a>
+                <a href="{{ url_for('build_all.all_buildings') }}" class="nav-link fw-semibold">อาคารทั้งหมด</a>
+
+                <div class="nav-item dropdown ms-lg-3">
+                    <a class="text-decoration-none d-flex align-items-center" href="#" id="userDropdown" role="button"
+                        data-bs-toggle="dropdown" aria-expanded="false" style="outline: none;">
+                        <i class="bi bi-person-circle fs-3 text-secondary"></i>
+                    </a>
+
+                    <ul class="dropdown-menu dropdown-menu-end shadow border-0" aria-labelledby="userDropdown"
+                        style="border-radius: 12px; min-width: 240px;">
+                        <li>
+                            <div class="px-4 py-3 text-start">
+                                <div class="fw-bold text-primary" style="font-size: 15px;">{{ session.get('full_name')
+                                    }}</div>
+                                {% if session.get('role') == 'student' %}
+                                <div class="text-muted small mt-1">รหัสนักเรียน: {{ session.get('identifier') }}</div>
+                                <span class="badge bg-success mt-2">STUDENT</span>
+                                {% elif session.get('role') == 'teacher' %}
+                                <div class="text-muted small mt-1">รหัสประจำตัว: {{ session.get('identifier') }}</div>
+                                <span class="badge mt-2" style="background-color: #6f42c1;">TEACHER</span>
+                                {% elif session.get('role') == 'staff' %}
+                                <div class="text-muted small mt-1">รหัสประจำตัว: {{ session.get('identifier') }}</div>
+                                <span class="badge bg-danger mt-2">STAFF</span>
+                                {% elif session.get('role') == 'admin' %}
+                                <div class="text-muted small mt-1">ID แอดมิน: {{ session.get('identifier') }}</div>
+                                <span class="badge bg-dark mt-2">ADMINISTRATOR</span>
+                                {% endif %}
+                            </div>
+                        </li>
+                        <li>
+                            <hr class="dropdown-divider">
+                        </li>
+
+                        {% if session.get('role') == 'admin' %}
+                        <li>
+                            <a class="dropdown-item py-2 px-4 fw-medium"
+                                href="{{ url_for('admin_manager.dashboard') }}">
+                                <i class="bi bi-people-fill me-2 text-primary"></i> จัดการข้อมูลผู้ใช้
+                            </a>
+                        </li>
+
+                        <li>
+                            <a class="dropdown-item py-2 px-4 fw-medium"
+                                href="{{ url_for('build_manager.dashboard') }}">
+                                <i class="bi bi-building-gear me-2 text-primary"></i> จัดการข้อมูลอาคาร
+                            </a>
+                        </li>
+
+                        <li>
+                            <a class="dropdown-item py-2 px-4 fw-medium"
+                                href="{{ url_for('admin_stats.show_statistics') }}">
+                                <i class="bi bi-graph-up-arrow me-2 text-primary"></i> สถิติการเข้าชม
+                            </a>
+                        </li>
+                        {% endif %}
+
+                        <li>
+                            <a class="dropdown-item text-danger fw-semibold py-2 px-4 mt-1"
+                                href="{{ url_for('auth.logout') }}">
+                                <i class="bi bi-box-arrow-right me-2"></i>ออกจากระบบ
+                            </a>
+                        </li>
+
+                    </ul>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <div class="container mt-4 mb-5">
+        <div
+            class="d-flex justify-content-between align-items-center mb-4 bg-white p-3 rounded shadow-sm border-start border-danger border-5">
+            <h3 class="mb-0 fw-bold"><i class="bi bi-shield-lock-fill text-danger me-2"></i> ระบบจัดการข้อมูลผู้ใช้
+                (Admin)
+            </h3>
+            <a href="{{ url_for('home.index') }}" class="btn btn-home-custom btn-sm me-2 shadow-sm">
+                <i class="bi bi-house-door-fill"></i> <span>หน้าหลัก</span>
+            </a>
+        </div>
+
+        <!-- ปุ่มเลือกดูข้อมูลแต่ละบทบาท -->
+        <ul class="nav nav-tabs" id="myTab" role="tablist">
+            <li class="nav-item" role="presentation">
+                <button class="nav-link active fw-bold text-success" id="student-tab" data-bs-toggle="tab"
+                    data-bs-target="#student" type="button" role="tab">🎓 นักเรียน</button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link fw-bold text-primary" id="teacher-tab" data-bs-toggle="tab"
+                    data-bs-target="#teacher" type="button" role="tab">👨‍🏫 ครู</button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link fw-bold text-danger" id="staff-tab" data-bs-toggle="tab" data-bs-target="#staff"
+                    type="button" role="tab">🛠️ เจ้าหน้าที่</button>
+            </li>
+        </ul>
+
+        <!-- ข้อมูลนักเรียนทั้งหมด -->
+        <div class="tab-content bg-white p-4 border border-top-0 rounded-bottom shadow-sm">
+
+            <div class="tab-pane fade show active" id="student" role="tabpanel">
+                <div class="d-flex justify-content-between mb-3">
+                    <h5 class="fw-bold">ข้อมูลนักเรียนทั้งหมด</h5>
+                    <button class="btn btn-add-student btn-sm shadow-sm me-2" data-bs-toggle="modal"
+                        data-bs-target="#addStudentModal">
+                        <i class="bi bi-person-plus-fill"></i> เพิ่มนักเรียน
+                    </button>
+                </div>
+
+                <div class="table-responsive border rounded">
+                    <table class="table table-hover align-middle mb-0">
+                        <thead class="table-light">
+                            <tr>
+                                <th>รหัสประจำตัว</th>
+                                <th>ชื่อ-นามสกุล</th>
+                                <th>อีเมล</th>
+                                <th>ระดับชั้น</th>
+                                <th><i class="bi bi-clock-history"></i> ใช้งานล่าสุด</th>
+                                <th class="text-center">จัดการ</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for s in students %}
+                            <tr>
+                                <td><span
+                                        class="badge bg-success bg-opacity-10 text-success border border-success px-2 py-1">{{
+                                        s.student_id }}</span></td>
+                                <td class="fw-medium">{{ s.full_name }}</td>
+                                <td>{{ s.email if s.email else '-' }}</td>
+                                <td>{{ s.grade_level }}/{{ s.room }}</td>
+                                <td class="text-muted small">
+                                    {{ s.last_login.strftime('%d/%m/%Y %H:%M') if s.last_login else
+                                    'ยังไม่เคยเข้าใช้งาน' }}
+                                </td>
+                                <td class="text-center">
+                                    <button class="btn btn-sm btn-edit-custom" data-bs-toggle="modal"
+                                        data-bs-target="#editStudentModal{{ s.id }}" title="แก้ไข">
+                                        <i class="bi bi-pencil-square"></i>
+                                    </button>
+                                    <form action="{{ url_for('admin_manager.delete_user', role='student', id=s.id) }}"
+                                        method="POST" class="d-inline delete-form">
+                                        <button type="button" class="btn btn-sm btn-delete-custom btn-delete"
+                                            title="ลบ"><i class="bi bi-trash"></i></button>
+                                    </form>
+                                </td>
+                            </tr>
+
+                            <!-- Model แก้ไขข้อมูลนักเรียน -->
+                            <div class="modal fade" id="editStudentModal{{ s.id }}" tabindex="-1">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header bg-warning text-dark">
+                                            <h5 class="modal-title fw-bold"><i class="bi bi-pencil-square"></i>
+                                                แก้ไขข้อมูลนักเรียน</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                        </div>
+                                        <form action="{{ url_for('admin_manager.edit_user', role='student', id=s.id) }}"
+                                            method="POST" class="validate-password-form">
+                                            <div class="modal-body">
+                                                <div class="mb-3">
+                                                    <label class="form-label text-muted small">รหัสประจำตัว
+                                                        (แก้ไขไม่ได้)</label>
+                                                    <input type="text" class="form-control bg-light"
+                                                        value="{{ s.student_id }}" readonly>
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label class="form-label">ชื่อ-นามสกุล</label>
+                                                    <input type="text" name="full_name" class="form-control"
+                                                        value="{{ s.full_name }}" required>
+                                                </div>
+                                                <div class="row mb-3">
+                                                    <div class="col-6">
+                                                        <label class="form-label">ระดับชั้น</label>
+                                                        <input type="text" name="grade_level" class="form-control"
+                                                            value="{{ s.grade_level }}">
+                                                    </div>
+                                                    <div class="col-6">
+                                                        <label class="form-label">ห้อง</label>
+                                                        <input type="text" name="room" class="form-control"
+                                                            value="{{ s.room }}">
+                                                    </div>
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label class="form-label">อีเมล</label>
+                                                    <input type="email" name="email" class="form-control"
+                                                        value="{{ s.email }}" required>
+                                                </div>
+                                                <div class="mb-3 border-top pt-3 mt-3">
+                                                    <label class="form-label fw-bold">ตั้งรหัสผ่านใหม่ <span
+                                                            class="text-danger fw-normal"
+                                                            style="font-size: 0.8rem;">(ปล่อยว่างหากไม่ต้องการเปลี่ยน)</span></label>
+                                                    <input type="password" name="password" class="form-control mb-2"
+                                                        placeholder="รหัสผ่านใหม่">
+                                                    <input type="password" name="confirm_password" class="form-control"
+                                                        placeholder="ยืนยันรหัสผ่านใหม่">
+                                                </div>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary"
+                                                    data-bs-dismiss="modal">ยกเลิก</button>
+                                                <button type="submit"
+                                                    class="btn btn-warning">บันทึกการเปลี่ยนแปลง</button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                            {% else %}
+                            <tr>
+                                <td colspan="6" class="text-center text-muted py-4">ไม่มีข้อมูลนักเรียน</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- ข้อมูลครูทั้งหมด -->
+            <div class="tab-pane fade" id="teacher" role="tabpanel">
+                <div class="d-flex justify-content-between mb-3">
+                    <h5 class="fw-bold">ข้อมูลครูทั้งหมด</h5>
+                    <button class="btn btn-add-teacher btn-sm" data-bs-toggle="modal" data-bs-target="#addTeacherModal">
+                        <i class="bi bi-person-plus-fill"></i> เพิ่มครู
+                    </button>
+                </div>
+
+                <div class="table-responsive border rounded">
+                    <table class="table table-hover align-middle mb-0">
+                        <thead class="table-light">
+                            <tr>
+                                <th>รหัสประจำตัว</th>
+                                <th>ชื่อ-นามสกุล</th>
+                                <th>อีเมล</th>
+                                <th>หมวดวิชา</th>
+                                <th>สังกัด</th>
+                                <th>เบอร์โทรศัพท์</th>
+                                <th><i class="bi bi-clock-history"></i> ใช้งานล่าสุด</th>
+                                <th class="text-center">จัดการ</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for t in teachers %}
+                            <tr>
+                                <td><span
+                                        class="badge bg-primary bg-opacity-10 text-primary border border-primary px-2 py-1">{{
+                                        t.teacher_id }}</span></td>
+                                <td class="fw-medium">{{ t.full_name }}</td>
+                                <td>{{ t.email if t.email else '-' }}</td>
+                                <td>{{ t.department }}</td>
+                                <td>{{ t.school_affiliation }}</td>
+                                <td>{{ t.phone_number if t.phone_number else '-' }}</td>
+                                <td class="text-muted small">
+                                    {{ t.last_login.strftime('%d/%m/%Y %H:%M') if t.last_login else
+                                    'ยังไม่เคยเข้าใช้งาน' }}
+                                </td>
+                                <td class="text-center">
+                                    <button class="btn btn-sm btn-edit-custom" data-bs-toggle="modal"
+                                        data-bs-target="#editTeacherModal{{ t.id }}" title="แก้ไข">
+                                        <i class="bi bi-pencil-square"></i>
+                                    </button>
+                                    <form action="{{ url_for('admin_manager.delete_user', role='teacher', id=t.id) }}"
+                                        method="POST" class="d-inline delete-form">
+                                        <button type="button" class="btn btn-sm btn-delete-custom" title="ลบ">
+                                            <i class="bi bi-trash"></i>
+                                        </button>
+                                    </form>
+                                </td>
+                            </tr>
+
+                            <!-- Models แก้ไขข้อมูลครู -->
+                            <div class="modal fade" id="editTeacherModal{{ t.id }}" tabindex="-1">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header bg-warning text-dark">
+                                            <h5 class="modal-title fw-bold"><i class="bi bi-pencil-square"></i>
+                                                แก้ไขข้อมูลครู</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                        </div>
+                                        <form action="{{ url_for('admin_manager.edit_user', role='teacher', id=t.id) }}"
+                                            method="POST" class="validate-password-form">
+                                            <div class="modal-body">
+                                                <div class="mb-3">
+                                                    <label class="form-label text-muted small">รหัสประจำตัว
+                                                        (แก้ไขไม่ได้)</label>
+                                                    <input type="text" class="form-control bg-light"
+                                                        value="{{ t.teacher_id }}" readonly>
+                                                </div>
+
+                                                <div class="mb-3">
+                                                    <label class="form-label">ชื่อ-นามสกุล</label>
+                                                    <input type="text" name="full_name" class="form-control"
+                                                        value="{{ t.full_name }}" required>
+                                                </div>
+
+                                                <div class="mb-3">
+                                                    <label class="form-label">อีเมล</label>
+                                                    <input type="text" name="email" class="form-control"
+                                                        value="{{ t.email}}" required>
+                                                </div>
+
+                                                <div class="mb-3">
+                                                    <label class="form-label">หมวดวิชา</label>
+                                                    <input type="text" name="department" class="form-control"
+                                                        value="{{ t.department }}" required>
+                                                </div>
+
+                                                <div class="mb-3">
+                                                    <label class="form-label">สังกัด</label>
+                                                    <input type="text" name="school_affiliation" class="form-control"
+                                                        value="{{ t.school_affiliation }}" required>
+                                                </div>
+
+                                                <div class="mb-3">
+                                                    <label class="form-label">เบอร์โทรศัพท์</label>
+                                                    <input type="text" name="phone_number" class="form-control"
+                                                        value="{{ t.phone_number }}">
+                                                </div>
+
+                                                <div class="mb-3 border-top pt-3 mt-3">
+                                                    <label class="form-label fw-bold">ตั้งรหัสผ่านใหม่ <span
+                                                            class="text-danger fw-normal"
+                                                            style="font-size: 0.8rem;">(ปล่อยว่างหากไม่ต้องการเปลี่ยน)</span></label>
+                                                    <input type="password" name="password" class="form-control mb-2"
+                                                        placeholder="รหัสผ่านใหม่">
+                                                    <input type="password" name="confirm_password" class="form-control"
+                                                        placeholder="ยืนยันรหัสผ่านใหม่">
+                                                </div>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary"
+                                                    data-bs-dismiss="modal">ยกเลิก</button>
+                                                <button type="submit"
+                                                    class="btn btn-warning">บันทึกการเปลี่ยนแปลง</button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                            {% else %}
+                            <tr>
+                                <td colspan="6" class="text-center text-muted py-4">ไม่มีข้อมูลครู</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- ข้อมูลเจ้าหน้าที่ -->
+            <div class="tab-pane fade" id="staff" role="tabpanel">
+                <div class="d-flex justify-content-between mb-3">
+                    <h5 class="fw-bold">ข้อมูลเจ้าหน้าที่ทั้งหมด</h5>
+                    <button class="btn btn-add-staff btn-sm" data-bs-toggle="modal" data-bs-target="#addStaffModal">
+                        <i class="bi bi-person-plus-fill"></i> เพิ่มเจ้าหน้าที่
+                    </button>
+                </div>
+
+                <div class="table-responsive border rounded">
+                    <table class="table table-hover align-middle mb-0">
+                        <thead class="table-light">
+                            <tr>
+                                <th>รหัสประจำตัว</th>
+                                <th>ชื่อ-นามสกุล</th>
+                                <th>อีเมล</th>
+                                <th>ตำแหน่ง</th>
+                                <th>หน้าที่รับผิดชอบ</th>
+                                <th>สังกัด</th>
+                                <th><i class="bi bi-clock-history"></i> ใช้งานล่าสุด</th>
+                                <th class="text-center">จัดการ</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for st in staffs %}
+                            <tr>
+                                <td><span
+                                        class="badge bg-danger bg-opacity-10 text-danger border border-danger px-2 py-1">{{
+                                        st.staff_id }}</span></td>
+                                <td class="fw-medium">{{ st.full_name }}</td>
+                                <td>{{ st.email if st.email else '-' }}</td>
+                                <td>{{ st.position }}</td>
+                                <td>{{ st.responsibility if st.responsibility else '-' }}</td>
+                                <td>{{ st.school_affiliation if st.school_affiliation else '-' }}</td>
+                                <td class="text-muted small">
+                                    {{ st.last_login.strftime('%d/%m/%Y %H:%M') if st.last_login else
+                                    'ยังไม่เคยเข้าใช้งาน' }}
+                                </td>
+                                <td class="text-center">
+                                    <button class="btn btn-sm btn-edit-custom" data-bs-toggle="modal"
+                                        data-bs-target="#editStaffModal{{ st.id }}" title="แก้ไข">
+                                        <i class="bi bi-pencil-square"></i>
+                                    </button>
+                                    <form action="{{ url_for('admin_manager.delete_user', role='staff', id=st.id) }}"
+                                        method="POST" class="d-inline delete-form">
+                                        <button type="button" class="btn btn-sm btn-delete-custom" title="ลบ"><i
+                                                class="bi bi-trash"></i></button>
+                                    </form>
+                                </td>
+                            </tr>
+
+                            <!-- Modal แก้ไขข้อมูลเจ้าหน้าที่ -->
+                            <div class="modal fade" id="editStaffModal{{ st.id }}" tabindex="-1">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header bg-warning text-dark">
+                                            <h5 class="modal-title fw-bold"><i class="bi bi-pencil-square"></i>
+                                                แก้ไขข้อมูลเจ้าหน้าที่</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                        </div>
+                                        <form action="{{ url_for('admin_manager.edit_user', role='staff', id=st.id) }}"
+                                            method="POST" class="validate-password-form">
+                                            <div class="modal-body">
+                                                <div class="mb-3">
+                                                    <label class="form-label text-muted small">รหัสประจำตัว
+                                                        (แก้ไขไม่ได้)</label>
+                                                    <input type="text" class="form-control bg-light"
+                                                        value="{{ st.staff_id }}" readonly>
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label class="form-label">ชื่อ-นามสกุล</label>
+                                                    <input type="text" name="full_name" class="form-control"
+                                                        value="{{ st.full_name }}" required>
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label class="form-label">ตำแหน่ง</label>
+                                                    <input type="text" name="position" class="form-control"
+                                                        value="{{ st.position }}" required>
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label class="form-label">หน้าที่รับผิดชอบ</label>
+                                                    <input type="text" name="responsibility" class="form-control"
+                                                        value="{{ st.responsibility }}">
+                                                </div>
+                                                <div>
+                                                    <label class="form-label">สังกัด</label>
+                                                    <input type="text" name="school_affiliation" class="form-control"
+                                                        value="{{ st.school_affiliation }}">
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label class="form-label">อีเมล</label>
+                                                    <input type="email" name="email" class="form-control"
+                                                        value="{{ st.email }}" required>
+                                                </div>
+                                                <div class="mb-3 border-top pt-3 mt-3">
+                                                    <label class="form-label fw-bold">ตั้งรหัสผ่านใหม่ <span
+                                                            class="text-danger fw-normal"
+                                                            style="font-size: 0.8rem;">(ปล่อยว่างหากไม่ต้องการเปลี่ยน)</span></label>
+                                                    <input type="password" name="password" class="form-control mb-2"
+                                                        placeholder="รหัสผ่านใหม่">
+                                                    <input type="password" name="confirm_password" class="form-control"
+                                                        placeholder="ยืนยันรหัสผ่านใหม่">
+                                                </div>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary"
+                                                    data-bs-dismiss="modal">ยกเลิก</button>
+                                                <button type="submit"
+                                                    class="btn btn-warning">บันทึกการเปลี่ยนแปลง</button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                            {% else %}
+                            <tr>
+                                <td colspan="6" class="text-center text-muted py-4">ไม่มีข้อมูลเจ้าหน้าที่</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Modal เพิ่มนักเรียน-->
+    <div class="modal fade" id="addStudentModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header bg-success text-white">
+                    <h5 class="modal-title fw-bold"><i class="bi bi-person-plus"></i> เพิ่มข้อมูลนักเรียน</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <form action="/admin/add/student" method="POST" class="validate-password-form">
+                    <div class="modal-body">
+                        <div class="mb-3">
+                            <label class="form-label">รหัสนักเรียน</label>
+                            <input type="text" name="student_id" class="form-control" required placeholder="เช่น 65001">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">ชื่อ-นามสกุล</label>
+                            <input type="text" name="full_name" class="form-control" required>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-6">
+                                <label class="form-label">ระดับชั้น</label>
+                                <input type="text" name="grade_level" class="form-control" placeholder="เช่น ม.6">
+                            </div>
+                            <div class="col-6">
+                                <label class="form-label">ห้อง</label>
+                                <input type="text" name="room" class="form-control" placeholder="เช่น 1">
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">อีเมล</label>
+                            <input type="email" name="email" class="form-control" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">รหัสผ่านชั่วคราว</label>
+                            <input type="password" name="password" class="form-control mb-2" required
+                                placeholder="ตั้งรหัสผ่าน">
+                            <input type="password" name="confirm_password" class="form-control" required
+                                placeholder="ยืนยันรหัสผ่านอีกครั้ง">
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">ยกเลิก</button>
+                        <button type="submit" class="btn btn-success">บันทึกข้อมูล</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal เพิ่มครู -->
+    <div class="modal fade" id="addTeacherModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header bg-primary text-white">
+                    <h5 class="modal-title fw-bold"><i class="bi bi-person-plus"></i> เพิ่มข้อมูลครู</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <form action="/admin/add/teacher" method="POST" class="validate-password-form">
+                    <div class="modal-body">
+                        <div class="mb-3">
+                            <label class="form-label">รหัสประจำตัวครู</label>
+                            <input type="text" name="teacher_id" class="form-control" required
+                                placeholder="เช่น TC-001">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">ชื่อ-นามสกุล</label>
+                            <input type="text" name="full_name" class="form-control" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">อีเมล</label>
+                            <input type="email" name="email" class="form-control" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">หมวดวิชา</label>
+                            <input type="text" name="department" class="form-control" required
+                                placeholder="เช่น วิทยาศาสตร์">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">สังกัด</label>
+                            <input type="text" name="school_affiliation" class="form-control" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">เบอร์โทรศัพท์</label>
+                            <input type="text" name="phone_number" class="form-control">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">รหัสผ่านชั่วคราว</label>
+                            <input type="password" name="password" class="form-control mb-2" required
+                                placeholder="ตั้งรหัสผ่าน">
+                            <input type="password" name="confirm_password" class="form-control" required
+                                placeholder="ยืนยันรหัสผ่านอีกครั้ง">
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">ยกเลิก</button>
+                        <button type="submit" class="btn btn-primary">บันทึกข้อมูล</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal เพิ่มเจ้าหน้าที่ -->
+    <div class="modal fade" id="addStaffModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header bg-danger text-white">
+                    <h5 class="modal-title fw-bold"><i class="bi bi-person-plus"></i> เพิ่มข้อมูลเจ้าหน้าที่</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <form action="/admin/add/staff" method="POST" class="validate-password-form">
+                    <div class="modal-body">
+                        <div class="mb-3">
+                            <label class="form-label">รหัสเจ้าหน้าที่</label>
+                            <input type="text" name="staff_id" class="form-control" required placeholder="เช่น ST-001">
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">ชื่อ-นามสกุล</label>
+                            <input type="text" name="full_name" class="form-control" required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">ตำแหน่ง</label>
+                            <input type="text" name="position" class="form-control" required placeholder="เช่น ธุรการ">
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">หน้าที่รับผิดชอบ</label>
+                            <input type="text" name="responsibility" class="form-control"
+                                placeholder="เช่น ดูแลเอกสารทั่วไป" required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">สังกัด</label>
+                            <input type="text" name="school_affiliation" class="form-control"
+                                placeholder="เช่น พิบูลมังสาหาร" required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">อีเมล</label>
+                            <input type="email" name="email" class="form-control" required
+                                placeholder="example@email.com">
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">รหัสผ่านชั่วคราว</label>
+                            <input type="password" name="password" class="form-control mb-2" required
+                                placeholder="ตั้งรหัสผ่าน">
+                            <input type="password" name="confirm_password" class="form-control" required
+                                placeholder="ยืนยันรหัสผ่านอีกครั้ง">
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">ยกเลิก</button>
+                        <button type="submit" class="btn btn-danger">บันทึกข้อมูล</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div style="height: 500px;"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        document.querySelectorAll('.btn-delete').forEach(button => {
+            button.addEventListener('click', function () {
+                const form = this.closest('form');
+                Swal.fire({
+                    title: 'ยืนยันการลบข้อมูล?',
+                    text: "หากลบแล้วจะไม่สามารถกู้คืนได้!",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#d33',
+                    cancelButtonColor: '#6c757d',
+                    confirmButtonText: 'ใช่, ลบเลย!',
+                    cancelButtonText: 'ยกเลิก'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        form.submit();
+                    }
+                })
+            });
+        });
+
+        document.querySelectorAll('.validate-password-form').forEach(form => {
+            form.addEventListener('submit', function (e) {
+                const password = this.querySelector('input[name="password"]').value;
+                const confirmPassword = this.querySelector('input[name="confirm_password"]').value;
+
+                if (password !== "" || confirmPassword !== "") {
+                    if (password !== confirmPassword) {
+                        e.preventDefault();
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'รหัสผ่านไม่ตรงกัน!',
+                            text: 'กรุณาตรวจสอบรหัสผ่าน และยืนยันรหัสผ่านใหม่อีกครั้ง',
+                            confirmButtonColor: '#d33'
+                        });
+                    }
+                }
+            });
+        });
+
+        // -----------Header Hide/Show----------- //
+        const header = document.getElementById("mainHeader");
+        const triggerPoint = 1;
+        header.classList.add("header-hide");
+        let lastScroll = 0;
+
+        window.addEventListener("scroll", () => {
+            const currentScroll = window.scrollY;
+            if (currentScroll <= triggerPoint) {
+                header.classList.add("header-hide");
+                header.classList.remove("header-show");
+            }
+            else if (currentScroll > lastScroll) {
+                header.classList.remove("header-hide");
+                header.classList.add("header-show");
+            }
+            lastScroll = currentScroll;
+        });
+
+        document.addEventListener('keydown', function (event) {
+            if (event.key === 'Enter' && event.target.tagName !== 'TEXTAREA') {
+                if (event.target.closest('form')) {
+                    event.preventDefault();
+                    return false;
+                }
+            }
+        });
+    </script>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+    <div id="flash-messages-container" style="display: none;">
+        {% for category, message in messages %}
+        <span class="flash-data" data-category="{{ category }}" data-message="{{ message }}"></span>
+        {% endfor %}
+    </div>
+    {% endif %}
+    {% endwith %}
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const flashItems = document.querySelectorAll('.flash-data');
+
+            flashItems.forEach(function (item) {
+                const category = item.getAttribute('data-category');
+                const message = item.getAttribute('data-message');
+                const iconType = category === 'success' ? 'success' : 'error';
+
+                Swal.fire({
+                    icon: iconType,
+                    title: message,
+                    showConfirmButton: false,
+                    timer: 2000,
+                    toast: true,
+                    position: 'top-end'
+                });
+            });
+        });
+    </script>
+
+</body>
+
+</html>
