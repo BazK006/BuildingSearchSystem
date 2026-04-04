@@ -1,6 +1,6 @@
 // -----------Header------------ //
 const header = document.getElementById("mainHeader");
-const triggerPoint = 320;
+const triggerPoint = 20;
 
 header.classList.add("header-hide");
 
@@ -24,43 +24,55 @@ window.addEventListener("scroll", () => {
 });
 
 // Effect Animation Pages
-const pageSection = document.querySelector(".page");
-const navBoxes = document.querySelectorAll(".nav-box");
-const popularBoxes = document.querySelectorAll('.popular-box');
+document.addEventListener("DOMContentLoaded", function () {
+    // --- ส่วนที่ 1: หัวข้อหลักหน้าเว็บ ---
+    const pageSection = document.querySelector(".page");
+    const navBoxes = document.querySelectorAll(".nav-box");
 
-const observer = new IntersectionObserver(
-    (entries) => {
+    const mainObserver = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
-                pageSection.classList.add("show");
-
+                entry.target.classList.add("show");
                 navBoxes.forEach((box, index) => {
-                    setTimeout(() => {
-                        box.classList.add("show");
-                    }, index * 150); // ไล่ทีละใบ
+                    setTimeout(() => { box.classList.add("show"); }, index * 150);
                 });
-
-                observer.unobserve(pageSection);
+                mainObserver.unobserve(entry.target);
             }
         });
-    },
-    { threshold: 0.3 }
-);
+    }, { threshold: 0.3 });
 
-observer.observe(pageSection);
+    if (pageSection) mainObserver.observe(pageSection);
 
-const popularObserver = new IntersectionObserver(entries => {
-    entries.forEach(entry => {
-        if (entry.isIntersecting) {
-            entry.target.classList.add('show');
-            popularObserver.unobserve(entry.target);
-        }
-    });
-}, {
-    threshold: 0.2
+
+    // --- อาคารยอดฮิต ---
+    const popularBoxContainer = document.querySelector("#popular-box");
+
+    if (popularBoxContainer) {
+        const popularSection = popularBoxContainer.closest('section') || popularBoxContainer.parentElement;
+
+        const popularObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    // 1. สั่งหัวข้อ (.header-drop) ให้ "หล่น"
+                    const header = entry.target.querySelector('.header-drop');
+                    if (header) header.classList.add('show');
+
+                    // 2. สั่งบล็อก (.popular-box) ให้ "ไหลตาม"
+                    const boxes = entry.target.querySelectorAll('.popular-box');
+                    boxes.forEach((box, index) => {
+                        setTimeout(() => {
+                            box.classList.add('show');
+                        }, 400 + (index * 150));
+                    });
+
+                    popularObserver.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.15 });
+
+        popularObserver.observe(popularSection);
+    }
 });
-
-popularBoxes.forEach(box => popularObserver.observe(box));
 
 
 // ปุ่มสามขีด hamburger //
@@ -70,7 +82,7 @@ function toggleSidebar() {
     document.querySelector(".hamburger").classList.toggle("active");
 }
 
-/** ปฏิทินประจำเดือน **/
+/** ข้อมูลวันสำคัญ **/
 const thaiHolidays = {
     "1-1": "วันขึ้นปีใหม่",
     "12-1": "วันเด็กแห่งชาติ",
@@ -82,8 +94,8 @@ const thaiHolidays = {
     "15-4": "วันสงกรานต์",
     "1-5": "วันแรงงานแห่งชาติ",
     "5-5": "วันฉัตรมงคล",
-    "9-6": "วันเฉลิมพระชนมพรรษาสมเด็จพระราชินี",
-    "28-7": "วันเฉลิมพระชนมพรรษาพระบาทสมเด็จพระเจ้าอยู่หัว",
+    "3-6": "วันเฉลิมฯ พระราชินี",
+    "28-7": "วันเฉลิมฯ ร.10",
     "12-8": "วันแม่แห่งชาติ",
     "13-10": "วันคล้ายวันสวรรคต ร.9",
     "23-10": "วันปิยมหาราช",
@@ -100,62 +112,67 @@ function loadCalendar() {
     const year = current.getFullYear();
     const month = current.getMonth();
 
-    const firstDay = new Date(year, month, 1).getDay();
-    const totalDays = new Date(year, month + 1, 0).getDate();
-
     document.getElementById("monthYear").textContent =
         current.toLocaleString("th-TH", { month: "long", year: "numeric" });
 
+    const firstDay = new Date(year, month, 1).getDay();
+    const totalDays = new Date(year, month + 1, 0).getDate();
     const body = document.getElementById("calendarBody");
     body.innerHTML = "";
 
     let row = document.createElement("tr");
-    let cellCount = 0;
 
+    // 1. เติมช่องว่างวันแรกของเดือน
     for (let i = 0; i < firstDay; i++) {
         row.appendChild(document.createElement("td"));
-        cellCount++;
     }
 
+    // 2. สร้างวันที่
     for (let day = 1; day <= totalDays; day++) {
         const td = document.createElement("td");
-        td.textContent = day;
-
-        const today = new Date();
-        if (
-            day === today.getDate() &&
-            month === today.getMonth() &&
-            year === today.getFullYear()
-        ) td.classList.add("today");
-
         const key = `${day}-${month + 1}`;
-        if (thaiHolidays[key]) td.classList.add("holiday");
+        const isHoliday = thaiHolidays[key];
+        const today = new Date();
 
-        td.onclick = () => {
-            const [d, m] = key.split("-");
-            const thaiMonths = [
-                "", "มกราคม", "กุมภาพันธ์", "มีนาคม", "เมษายน", "พฤษภาคม", "มิถุนายน",
-                "กรกฎาคม", "สิงหาคม", "กันยายน", "ตุลาคม", "พฤศจิกายน", "ธันวาคม"
-            ];
+        // ใส่ Class ตามสถานะ
+        if (day === today.getDate() && month === today.getMonth() && year === today.getFullYear()) {
+            td.classList.add("today");
+        }
+        if (isHoliday) {
+            td.classList.add("holiday");
+        }
 
-            const dateText = `${parseInt(d)} ${thaiMonths[parseInt(m)]}`;
+        // โครงสร้างเนื้อหาข้างใน
+        td.innerHTML = `<span class="day-num">${day}</span>${isHoliday ? '<div class="event-badge"></div>' : ''}`;
 
-            document.getElementById("eventText").textContent =
-                thaiHolidays[key]
-                    ? `วันที่ ${dateText} (${thaiHolidays[key]})`
-                    : `วันที่ ${dateText}`;
+        // Event ตอนคลิก
+        td.onclick = function () {
+            if (day) {
+
+                document.querySelectorAll("#calendarBody td").forEach(el => el.classList.remove("selected-day"));
+                this.classList.add("selected-day");
+
+                const thaiMonths = ["", "มกราคม", "กุมภาพันธ์", "มีนาคม", "เมษายน", "พฤษภาคม", "มิถุนายน", "กรกฎาคม", "สิงหาคม", "กันยายน", "ตุลาคม", "พฤศจิกายน", "ธันวาคม"];
+                const eventInfo = isHoliday ? ` (${isHoliday})` : "";
+                document.getElementById("eventText").textContent = `วันที่ ${day} ${thaiMonths[month + 1]}${eventInfo}`;
+            }
         };
 
         row.appendChild(td);
-        cellCount++;
 
-        if (cellCount % 7 === 0) {
+
+        if (new Date(year, month, day).getDay() === 6) {
             body.appendChild(row);
             row = document.createElement("tr");
         }
     }
 
-    if (cellCount % 7 !== 0) body.appendChild(row);
+    if (row.children.length > 0) {
+        while (row.children.length < 7) {
+            row.appendChild(document.createElement("td"));
+        }
+        body.appendChild(row);
+    }
 }
 
 function prevMonth() { current.setMonth(current.getMonth() - 1); loadCalendar(); }
@@ -221,8 +238,8 @@ slider.addEventListener('scroll', () => {
         const index = Math.round(slider.scrollLeft / slider.clientWidth);
         currentIndex = index;
         updateDots(index);
-        resetAutoSlide(); // reset เวลาใหม่หลังจากเลื่อนเอง
-    }, 150); // หน่วงเล็กน้อยเพื่อจับการ scroll
+        resetAutoSlide();
+    }, 150);
 });
 
 // เริ่ม auto slide
@@ -336,7 +353,6 @@ window.onresize = adjustHeight;
 function updateClock() {
     const now = new Date();
 
-    // เวลาไทย
     const thailandTime = new Date(
         now.toLocaleString("en-US", { timeZone: "Asia/Bangkok" })
     );
@@ -345,21 +361,16 @@ function updateClock() {
     let minutes = thailandTime.getMinutes();
     let seconds = thailandTime.getSeconds();
 
-    // เติม 0 หน้าเลข
     const hh = hours.toString().padStart(2, "0");
     const mm = minutes.toString().padStart(2, "0");
     const ss = seconds.toString().padStart(2, "0");
 
-    // แสดงเวลา (24 ชม.)
     document.getElementById("timeText").textContent = `${hh}:${mm}:${ss}`;
 
-    // ไม่ใช้ AM / PM
     const ampmEl = document.getElementById("ampmText");
     if (ampmEl) ampmEl.textContent = "";
 
-    // ชื่อวันไทย
     const daysTH = ["อาทิตย์", "จันทร์", "อังคาร", "พุธ", "พฤหัสบดี", "ศุกร์", "เสาร์"];
-    // เดือนไทย
     const monthsTH = [
         "มกราคม", "กุมภาพันธ์", "มีนาคม", "เมษายน", "พฤษภาคม", "มิถุนายน",
         "กรกฎาคม", "สิงหาคม", "กันยายน", "ตุลาคม", "พฤศจิกายน", "ธันวาคม"
@@ -377,27 +388,104 @@ function updateClock() {
 setInterval(updateClock, 1000);
 updateClock();
 
-// Mini Search 
+// อัปเดตสภาพอากาศปัจจุบัน
+const LAT = 15.114993;
+const LON = 105.266293;
+
+async function fetchWeather() {
+    try {
+        const url = `https://api.open-meteo.com/v1/forecast?latitude=${LAT}&longitude=${LON}&current_weather=true&hourly=temperature_2m,relativehumidity_2m&daily=temperature_2m_max,temperature_2m_min&timezone=Asia%2FBangkok`;
+
+        const response = await fetch(url);
+        const data = await response.json();
+
+        if (data.current_weather) {
+            updateWeatherUI(data);
+        } else {
+            throw new Error("Data format error");
+        }
+    } catch (error) {
+        console.error("Weather Fetch Error:", error);
+        document.getElementById("descText").innerText = "โหลดข้อมูลไม่สำเร็จ";
+    }
+}
+
+function updateWeatherUI(data) {
+    const current = data.current_weather;
+    const temp = Math.round(current.temperature);
+    const weatherCode = current.weathercode; // เลข Code สภาพอากาศ
+    const windSpeedKmH = current.windspeed.toFixed(1);
+    const hi = Math.round(data.daily.temperature_2m_max[0]);
+    const low = Math.round(data.daily.temperature_2m_min[0]);
+
+    document.getElementById("hiLowText").innerText = `สูงสุด: ${hi}° ต่ำสุด: ${low}°`;
+    document.getElementById("tempText").innerText = `${temp}°C`;
+    const weatherInfo = getWeatherInfo(weatherCode);
+
+    document.getElementById("descText").innerText = weatherInfo.text;
+    const humidity = data.hourly.relativehumidity_2m[0];
+
+    document.getElementById("humidityText").innerHTML = `<i class="bi bi-droplets-fill text-info"></i> ความชื้น: ${humidity}%`;
+    document.getElementById("windText").innerHTML = `<i class="bi bi-wind text-secondary"></i> ลม: ${windSpeedKmH} กม./ชม.`;
+
+    const card = document.getElementById("weatherCard");
+    const iconZone = document.getElementById("weatherIcon");
+
+    iconZone.innerHTML = `<i class="bi ${weatherInfo.icon}" style="font-size: 2rem; margin-right: 10px;"></i>`;
+    card.style.transition = "background 1s ease";
+
+    if (weatherInfo.state === "Rain") {
+        card.style.background = "linear-gradient(135deg, #606c88 0%, #3f4c6b 100%)";
+        card.style.color = "#ffffff";
+    } else if (weatherInfo.state === "Clear") {
+        card.style.background = "linear-gradient(135deg, #FFEFBA 0%, #FFFFFF 100%)";
+        card.style.color = "#212529";
+    } else if (weatherInfo.state === "Clouds") {
+        card.style.background = "linear-gradient(135deg, #e6e9f0 0%, #eef1f5 100%)";
+        card.style.color = "#212529";
+    } else {
+        card.style.background = "#ffffff";
+        card.style.color = "#212529";
+    }
+}
+
+// ฟังก์ชันช่วยแปลง WMO Weather Code เป็นข้อมูลที่เราเข้าใจ
+function getWeatherInfo(code) {
+    if (code === 0) return { text: "ท้องฟ้าแจ่มใส", icon: "bi-brightness-high-fill", state: "Clear" };
+    if (code <= 3) return { text: "มีเมฆบางส่วน", icon: "bi-cloud-sun-fill", state: "Clouds" };
+    if (code >= 51 && code <= 67) return { text: "ฝนตกเล็กน้อย", icon: "bi-cloud-drizzle-fill", state: "Rain" };
+    if (code >= 71 && code <= 82) return { text: "หิมะตก/ฝนน้ำแข็ง", icon: "bi-snow", state: "Rain" };
+    if (code >= 95) return { text: "พายุฝนฟ้าคะนอง", icon: "bi-cloud-lightning-rain-fill", state: "Rain" };
+    return { text: "เมฆครึ้ม", icon: "bi-cloud-fill", state: "Clouds" };
+}
+
+// เรียกใช้งาน
+fetchWeather();
+
+// ค้นหาอาารต่างๆ
 function goSearch() {
     const q = document.getElementById("quickSearch").value.trim();
     if (!q) return;
-
-    // ส่งคำค้นไปหน้า BuildingFindSystem
-    window.location.href =
-        `pages/BuildingFindSystem.html?q=${encodeURIComponent(q)}`;
+    window.location.href = `${SEARCH_PAGE_URL}?q=${encodeURIComponent(q)}`;
 }
 
+// กด enter ได้
 function handleEnter(e) {
     if (e.key === "Enter") {
         goSearch();
     }
 }
 
-function goTo(page) {
-    window.location.href = page;
+// ไปตามลิ้งคนั้นๆ
+function goTo(pageName) {
+    if (APP_URLS[pageName]) {
+        window.location.href = APP_URLS[pageName];
+    } else {
+        console.error("หาลิงก์ไม่เจอครับ สำหรับหน้า: " + pageName);
+    }
 }
 
-// modal ในหน้าหลักอาคารยอดฮิต
+// เปิด Model ขึ้นได้
 function openImage(img) {
     const overlay = document.getElementById("imageOverlay");
     const overlayImg = document.getElementById("overlayImg");
@@ -409,3 +497,4 @@ function openImage(img) {
 function closeImage() {
     document.getElementById("imageOverlay").classList.remove("show");
 }
+

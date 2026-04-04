@@ -10,35 +10,124 @@
     <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="../static/css/findbuildcss.css">
-    <link rel="icon" type="image/png" href="static/images/pmlogo.png">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/build_search.css') }}">
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='images/pmlogo.png') }}">
 </head>
 
 <body>
     <header id="mainHeader" class="shadow-sm bg-white">
-        <div class="container py-3 d-flex flex-column flex-md-row 
-                justify-content-between align-items-center text-center text-md-start">
-            <div class="d-flex align-items-center gap-2">
-                <a href="../index.html" style="text-decoration: none; color: black;">
-                    <img src="../static/images/pmlogo.png" width="38" height="36" class="img-fluid">
-                </a>
-                <a href="../index.html" style="text-decoration: none; color: black;">
-                    <h4 class="m-1 fst-italic">ระบบค้นหาอาคาร</h4>
-                </a>
-            </div>
+        <div
+            class="container py-3 d-flex flex-column flex-md-row justify-content-between align-items-center text-center text-md-start">
+            <a href="{{ url_for('home.index') }}" style="text-decoration: none; color: black;">
+                <div class="d-flex align-items-center gap-2">
+                    <img src="{{ url_for('static', filename='images/pmlogo.png') }}" alt="โลโก้โรงเรียน" width="38"
+                        height="36" class="img-fluid">
+                    <h4 class="m-0 fst-italic">ระบบค้นหาอาคารสถานที่</h4>
+                </div>
+            </a>
 
-            <!-- Desktop Menu -->
-            <nav class="d-none d-lg-flex gap-5 ps-lg-5">
-                <a href="../index.html" class="nav-link fw-semibold">หน้าหลัก</a>
-                <a href="about.html" class="nav-link fw-semibold">เกี่ยวกับ</a>
-                <a href="BuildingFindSystem.html" class="nav-link fw-semibold">ค้นหาอาคาร</a>
-                <a href="schoolmap.html" class="nav-link fw-semibold">แผนที่</a>
-                <a href="buildall.html" class="nav-link fw-semibold">อาคารทั้งหมด</a>
+            <nav class="d-none d-lg-flex align-items-center gap-5 ps-lg-5">
+                <a href="{{ url_for('home.index') }}" class="nav-link fw-semibold">หน้าหลัก</a>
+                <a href="{{ url_for('about.about') }}" class="nav-link fw-semibold">เกี่ยวกับ</a>
+                <a href="{{ url_for('build_search.search') }}" class="nav-link fw-semibold">ค้นหาอาคาร</a>
+                <a href="{{ url_for('map.school_map') }}" class="nav-link fw-semibold">แผนที่</a>
+                <a href="{{ url_for('build_all.all_buildings') }}" class="nav-link fw-semibold">อาคารทั้งหมด</a>
+
+                <div class="nav-item dropdown ms-lg-3">
+                    <a class="text-decoration-none d-flex align-items-center" href="#" id="userDropdown" role="button"
+                        data-bs-toggle="dropdown" aria-expanded="false" style="outline: none; box-shadow: none;">
+                        <i class="bi bi-person-circle fs-3 text-secondary"></i>
+                    </a>
+
+                    <ul class="dropdown-menu dropdown-menu-end shadow border-0" aria-labelledby="userDropdown"
+                        style="border-radius: 12px; min-width: 240px;">
+
+                        {% if session.get('full_name') %}
+                        <li>
+                            <div class="px-4 py-3 text-start">
+                                <div class="fw-bold text-primary" style="font-size: 15px;">{{ session.get('full_name')
+                                    }}</div>
+
+                                {% if session.get('role') == 'student' %}
+                                <div class="text-muted small mt-1">รหัสนักเรียน: {{ session.get('identifier') }}</div>
+                                <span class="badge bg-success mt-2">STUDENT</span>
+
+                                {% elif session.get('role') == 'teacher' %}
+                                <div class="text-muted small mt-1">รหัสประจำตัว: {{ session.get('identifier') }}</div>
+                                <span class="badge mt-2" style="background-color: #6f42c1;">TEACHER</span>
+
+                                {% elif session.get('role') == 'staff' %}
+                                <div class="text-muted small mt-1">รหัสประจำตัว: {{ session.get('identifier') }}</div>
+                                <span class="badge bg-danger mt-2">STAFF</span>
+
+                                {% elif session.get('role') == 'admin' %}
+                                <div class="text-muted small mt-1">รหัสประจำตัว: {{ session.get('identifier') }}</div>
+                                <span class="badge bg-dark mt-2">ADMINISTRATOR</span>
+                                {% endif %}
+                            </div>
+                        </li>
+
+                        <li>
+                            <hr class="dropdown-divider">
+                        </li>
+
+                        {% if session.get('role') == 'admin' %}
+                        <li>
+                            <a class="dropdown-item py-2 px-4 fw-medium"
+                                href="{{ url_for('admin_manager.dashboard') }}">
+                                <i class="bi bi-people-fill me-2 text-primary"></i> จัดการข้อมูลผู้ใช้
+                            </a>
+                        </li>
+
+                        <li>
+                            <a class="dropdown-item py-2 px-4 fw-medium"
+                                href="{{ url_for('build_manager.dashboard') }}">
+                                <i class="bi bi-building-gear me-2 text-primary"></i> จัดการข้อมูลอาคาร
+                            </a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item py-2 px-4 fw-medium"
+                                href="{{ url_for('admin_stats.show_statistics') }}">
+                                <i class="bi bi-graph-up-arrow me-2 text-primary"></i> สถิติการเข้าชม
+                            </a>
+                        </li>
+                        {% endif %}
+
+                        {% if session.get('role') == 'staff' %}
+                        <li>
+                            <a class="dropdown-item py-2 px-4 fw-medium"
+                                href="{{ url_for('build_manager.dashboard') }}">
+                                <i class="bi bi-building-gear me-2 text-primary"></i> จัดการข้อมูลอาคาร
+                            </a>
+                        </li>
+                        {% endif %}
+
+                        <li>
+                            <a class="dropdown-item text-danger fw-semibold py-2 px-4 mt-1"
+                                href="{{ url_for('auth.logout') }}">
+                                <i class="bi bi-box-arrow-right me-2"></i>ออกจากระบบ
+                            </a>
+                        </li>
+
+                        {% else %}
+                        <li>
+                            <a class="dropdown-item text-primary fw-semibold py-2 px-4"
+                                href="{{ url_for('auth.login') }}">
+                                <i class="bi bi-box-arrow-in-right me-2"></i>ลงชื่อเข้าใช้ระบบ
+                            </a>
+                        </li>
+                        {% endif %}
+                    </ul>
+                </div>
             </nav>
+
         </div>
     </header>
 
-    <!-- ปุ่ม Hamburger -->
+    <!-- Hamburger -->
     <button class="hamburger d-lg-none" onclick="toggleSidebar()">
         <div></div>
         <div></div>
@@ -46,41 +135,136 @@
     </button>
 
     <!-- Sidebar -->
-    <div class="sidebar pt-5" id="sidebar">
-        <a class='d-block p-3 text-white text-decoration-none' href="../index.html">หน้าหลัก</a>
-        <a class='d-block p-3 text-white text-decoration-none' href="about.html">เกี่ยวกับ</a>
-        <a class='d-block p-3 text-white text-decoration-none' href="BuildingFindSystem.html">ระบบค้นหาอาคาร</a>
-        <a class='d-block p-3 text-white text-decoration-none' href="schoolmap.html">แผนที่ภายในโรงเรียน</a>
-        <a class='d-block p-3 text-white text-decoration-none' href="buildall.html">อาคารทั้งหมด</a>
+    <div class="sidebar pt-4" id="sidebar">
+        {% if session.get('full_name') %}
+        <div class="px-4 py-3 mb-2 border-bottom border-secondary border-opacity-25 mt-3">
+            <div class="d-flex align-items-center">
+                <i class="bi bi-person-circle fs-2 text-info"></i>
+                <div class="ms-3 overflow-hidden">
+                    <div class="text-white fw-bold text-truncate" style="font-size: 14px;">{{ session.get('full_name')
+                        }}</div>
+                    <div class="text-info" style="font-size: 11px;">
+                        {% if session.get('role') == 'student' %}
+                        รหัสนักเรียน: {{ session.get('identifier') }}
+                        {% else %}
+                        รหัสประจำตัว: {{ session.get('identifier') }}
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            <span class="badge bg-secondary mt-2 w-100 opacity-75" style="font-size: 10px;">{{ session.get('role') |
+                upper }}</span>
+        </div>
+        {% endif %}
+
+        <div class="mt-4 pt-2">
+            <a class="d-flex align-items-center p-3 text-white text-decoration-none" href="{{ url_for('home.index') }}">
+                <i class="bi bi-house-door me-3 fs-5 text-info"></i> หน้าหลัก
+            </a>
+            <a class="d-flex align-items-center p-3 text-white text-decoration-none"
+                href="{{ url_for('about.about') }}">
+                <i class="bi bi-info-circle me-3 fs-5 text-info"></i> เกี่ยวกับ
+            </a>
+            <a class="d-flex align-items-center p-3 text-white text-decoration-none"
+                href="{{ url_for('build_search.search') }}">
+                <i class="bi bi-search me-3 fs-5 text-info"></i> ระบบค้นหาอาคาร
+            </a>
+            <a class="d-flex align-items-center p-3 text-white text-decoration-none"
+                href="{{ url_for('map.school_map') }}">
+                <i class="bi bi-map me-3 fs-5 text-info"></i> แผนที่
+            </a>
+            <a class="d-flex align-items-center p-3 text-white text-decoration-none"
+                href="{{ url_for('build_all.all_buildings') }}">
+                <i class="bi bi-buildings me-3 fs-5 text-info"></i> อาคารทั้งหมด
+            </a>
+
+            {% if session.get('role') == 'admin' %}
+            <a class="d-flex align-items-center p-3 text-white text-decoration-none"
+                href="{{ url_for('admin_manager.dashboard') }}">
+                <i class="bi bi-person-gear me-3 fs-5 text-info"></i> จัดการข้อมูลผู้ใช้
+            </a>
+            <a class="d-flex align-items-center p-3 text-white text-decoration-none"
+                href="{{ url_for('admin_stats.show_statistics') }}">
+                <i class="bi bi-bar-chart-line-fill me-3 fs-5 text-info"></i> สถิติการเข้าชม
+            </a>
+            {% endif %}
+
+            {% if session.get('role') == 'admin' or session.get('role') == 'staff' %}
+            <a class="d-flex align-items-center p-3 text-white text-decoration-none"
+                href="{{ url_for('build_manager.dashboard') }}">
+                <i class="bi bi-building-fill-gear me-3 fs-5 text-info"></i> จัดการข้อมูลอาคารสถานที่
+            </a>
+            {% endif %}
+        </div>
+
+        <div class="mt-4 px-3">
+            {% if session.get('full_name') %}
+            <a class="btn btn-outline-danger w-100 d-flex align-items-center justify-content-center py-2"
+                href="{{ url_for('auth.logout') }}">
+                <i class="bi bi-box-arrow-right me-2"></i> ออกจากระบบ
+            </a>
+            {% else %}
+            <a class="btn btn-outline-info w-100 d-flex align-items-center justify-content-center py-2"
+                href="{{ url_for('auth.login') }}">
+                <i class="bi bi-box-arrow-in-right me-2"></i> ลงชื่อเข้าใช้
+            </a>
+            {% endif %}
+        </div>
     </div>
 
-    <!-- Overlay มืดด้านหลัง -->
     <div class="overlay" id="overlay" onclick="toggleSidebar()"></div>
 
     <div class="container py-5" id="buildingSection">
 
-        <!-- Title + Search -->
         <div class="d-flex flex-column flex-md-row align-items-md-center justify-content-between mb-4 gap-3">
             <h2 class="fw-bold mb-0 text-center text-md-start fade-in">
-                ระบบค้นหาอาคารภายในโรงเรียน
+                ระบบค้นหาอาคารสถานที่
             </h2>
 
-            <input type="text" id="searchInput" style="width: 65%;"
-                class="form-control form-control-lg shadow-sm w-md-50 mx-auto "
-                placeholder="พิมพ์ชื่ออาคาร เช่น อาคาร 10... ">
+            <div class="d-flex flex-column flex-md-row gap-3 w-100 justify-content-md-end" style="max-width: 900px;">
+
+                <div class="input-group input-group-lg shadow-sm rounded-3 overflow-hidden"
+                    style="flex: 2; height: 48px;">
+                    <span class="input-group-text bg-white border-end-0 text-muted" style="border-color: #dee2e6;">
+                        <i class="bi bi-search"></i>
+                    </span>
+                    <input type="text" id="searchInput" class="form-control border-start-0 ps-0 fw-light"
+                        placeholder="อาคาร 10..."
+                        style="font-size: 0.95rem; outline: none; box-shadow: none; border-color: #dee2e6; height: 48px;">
+                </div>
+
+                <button id="btnNearMe"
+                    class="btn shadow-sm rounded-3 px-4 d-flex align-items-center justify-content-center gap-2 transition-all"
+                    style="min-width: 180px; height: 48px; font-size: 0.95rem; background-color: #007bff; color: white; border: none;">
+                    <i class="bi bi-geo-alt-fill"></i>
+                    <span id="btnNearMeText">ค้นหาอาคารใกล้ฉัน</span>
+                    <div id="nearMeSpinner" class="spinner-border spinner-border-sm d-none"></div>
+                </button>
+
+                <div class="shadow-sm rounded-3" style="flex: 1; min-width: 180px;">
+                    <select id="categorySelect" class="form-select form-select-lg border-1 fw-medium"
+                        style="font-size: 0.95rem; cursor: pointer; border-color: #dee2e6; height: 48px;">
+                        <option value="">ทุกหมวดหมู่</option>
+                        {% for cat in categories %}
+                        <option value="{{ cat.id }}" {% if select_cat==cat.id|string %}selected{% endif %}>
+                            {{ cat.name }}
+                        </option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
         </div>
 
         <hr>
 
-        <!-- Cards -->
         <div class="row g-4 justify-content-center card-group-animate" id="buildingContainer"></div>
+
         <div id="noResult" class="text-center text-muted mt-5" style="display: none;">
             🔍 ไม่พบอาคารที่ค้นหา
         </div>
 
     </div>
 
-    <!-- Modal for Card Search -->
     <div class="modal fade" id="detailModal" tabindex="-1">
         <div class="modal-dialog modal-lg modal-dialog-centered">
             <div class="modal-content rounded-4">
@@ -90,9 +274,23 @@
                     <button class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
 
-                <div class="modal-body">
-                    <img id="modalImg" class="img-fluid rounded mb-3 d-block mx-auto">
-                    <p id="modalDesc" class="text-muted"></p>
+                <div class="modal-body p-4">
+                    <div class="text-center mb-4">
+                        <img id="modalImg" class="img-fluid rounded-4 shadow-sm w-100"
+                            style="max-height: 280px; object-fit: cover; border: 1px solid #eaeaea;">
+                    </div>
+
+                    <div class="bg-light p-4 rounded-4 border border-light-subtle shadow-sm position-relative">
+                        <span class="badge bg-info text-dark position-absolute top-0 end-0 mt-3 me-3 rounded-pill">
+                            <i class="bi bi-eye"></i> <span id="modalViewCount">0</span>
+                        </span>
+
+                        <h5 class="fw-bold text-primary mb-2">
+                            <i class="bi bi-info-circle-fill me-2"></i>รายละเอียด
+                        </h5>
+                        <hr class="text-secondary opacity-25 mt-0 mb-3">
+                        <p id="modalDesc" class="text-muted mb-0" style="line-height: 1.7; font-size: 15px;"></p>
+                    </div>
                 </div>
 
                 <div class="modal-footer">
@@ -107,9 +305,7 @@
 
     <div class="box1" style="height: 200px;"></div>
 
-    <!-- วิธีใช้ -->
     <div class="container my-5">
-
         <div class="card shadow-sm p-4"
             style="border-radius: 18px; background: #fff; font-size: 14px; line-height: 1.7;">
 
@@ -119,8 +315,6 @@
             </h5>
 
             <div class="row g-3">
-
-                <!-- Step 1 -->
                 <div class="col-12 col-md-6">
                     <div class="d-flex align-items-start">
                         <span class="badge bg-primary rounded-pill me-3 mt-1">1</span>
@@ -133,7 +327,6 @@
                     </div>
                 </div>
 
-                <!-- Step 2 -->
                 <div class="col-12 col-md-6">
                     <div class="d-flex align-items-start">
                         <span class="badge bg-primary rounded-pill me-3 mt-1">2</span>
@@ -146,7 +339,6 @@
                     </div>
                 </div>
 
-                <!-- Step 3 -->
                 <div class="col-12 col-md-6">
                     <div class="d-flex align-items-start">
                         <span class="badge bg-primary rounded-pill me-3 mt-1">3</span>
@@ -160,7 +352,6 @@
                     </div>
                 </div>
 
-                <!-- Step 4 -->
                 <div class="col-12 col-md-6">
                     <div class="d-flex align-items-start">
                         <span class="badge bg-primary rounded-pill me-3 mt-1">4</span>
@@ -174,22 +365,30 @@
                 </div>
 
             </div>
-
         </div>
-
     </div>
 
+    <footer class="text-center py-5" style="width: 100%; background: transparent;">
+        <hr style="opacity: 0.1; margin: 0;">
 
-    <hr class="mb-5">
-    <footer class="text-center p-3 bg-light" style="position: relative; top: -20px;">
-        © 2025 ระบบค้นหาอาคารภายในโรงเรียนพิบูลมังสาหาร (ทดลองใช้) | Developed By Kasemsak
+        <div class="container">
+            <div class="mt-4">
+                <p class="text-muted mb-0" style="font-size: 14px; letter-spacing: 0.5px;">
+                    © 2025-2026 ระบบค้นหาอาคารภายในโรงเรียนพิบูลมังสาหาร (ทดลองใช้)
+                </p>
+                <p class="mt-1" style="font-size: 14px;">
+                    <span class="text-muted">Developed By</span>
+                    <strong class="text-dark" style="font-weight: 700;">Kasemsak</strong>
+                </p>
+            </div>
+        </div>
     </footer>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-
-
-    <script src="../static/js/BuildSearch.js">
+    <script>
+        window.dynamicBuildings = {{ building_data | tojson | safe }};
     </script>
+
+    <script src="{{ url_for('static', filename='js/BuildSearch.js') }}"></script>
 
 </body>
 

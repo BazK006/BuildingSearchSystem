@@ -36,12 +36,14 @@ header {
 }
 
 .hero-about h1 {
+  color: #000000;
   font-weight: 700;
   opacity: 0;
   animation: fadeIn 0.8s ease forwards;
 }
 
 .hero-about p {
+  color: #484a4c;
   opacity: 0;
   animation: fadeIn 0.8s ease forwards;
   animation-delay: 0.25s;
@@ -51,6 +53,7 @@ header {
   from {
     opacity: 0;
   }
+
   to {
     opacity: 0.85;
   }
@@ -141,15 +144,19 @@ header {
 .stagger-list.show li:nth-child(1) {
   transition-delay: 0.1s;
 }
+
 .stagger-list.show li:nth-child(2) {
   transition-delay: 0.2s;
 }
+
 .stagger-list.show li:nth-child(3) {
   transition-delay: 0.3s;
 }
+
 .stagger-list.show li:nth-child(4) {
   transition-delay: 0.4s;
 }
+
 .stagger-list.show li:nth-child(5) {
   transition-delay: 0.5s;
 }
@@ -185,12 +192,15 @@ header {
 .feature-list.show .feature-item:nth-child(1) {
   transition-delay: 0.1s;
 }
+
 .feature-list.show .feature-item:nth-child(2) {
   transition-delay: 0.25s;
 }
+
 .feature-list.show .feature-item:nth-child(3) {
   transition-delay: 0.4s;
 }
+
 .feature-list.show .feature-item:nth-child(4) {
   transition-delay: 0.55s;
 }
