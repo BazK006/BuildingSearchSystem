@@ -1,5 +1,5 @@
 from sqlalchemy import Column, Integer, String, DateTime
-from models.user import Base
+from database import Base
 
 
 class Teacher(Base):
