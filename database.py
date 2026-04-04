@@ -1,17 +1,24 @@
+import os
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, declarative_base
 from config import settings
 
-DATABASE_URL = (
-    f"postgresql://{settings.db_user}:{settings.db_pass}@"
-    f"{settings.db_host}:{settings.db_port}/{settings.db_name}"
-)
+DATABASE_URL = os.environ.get("DATABASE_URL")
+
+if not DATABASE_URL:
+    DATABASE_URL = (
+        f"postgresql://{settings.db_user}:{settings.db_pass}@"
+        f"{settings.db_host}:{settings.db_port}/{settings.db_name}"
+    )
+
+if DATABASE_URL.startswith("postgres://"):
+    DATABASE_URL = DATABASE_URL.replace("postgres://", "postgresql://", 1)
 
 engine = create_engine(
     DATABASE_URL,
     hide_parameters=True,
-    pool_size=10,         
-    max_overflow=20,      
+    pool_size=10,
+    max_overflow=20,
     pool_recycle=3600,
 )
 
