@@ -1,5 +1,5 @@
 import os
-import uuid  # เพิ่มเพื่อสร้าง Unique ID ให้ชื่อไฟล์
+import uuid  
 from flask import Blueprint, render_template, request, redirect, url_for, session, flash
 from functools import wraps
 from werkzeug.utils import secure_filename
